@@ -1,0 +1,93 @@
+/*menu canvas*/
+canvas {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            
+        }
+/*menu icon camera*/
+#menuSideBar {
+            position: relative;
+            float: left;
+            widows: 20%;
+        }
+
+        #btnClose {
+            position: relative;
+            z-index: 2;
+            width: 40px;
+            height: 40px;
+        }
+
+        #btnOpen {
+            position: relative;
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+        }
+
+        #item img:hover {
+            color: 0x41cece;
+        }
+
+        #menuIcon {
+            position: absolute;
+            width: 100%;
+            height: 0px;
+            bottom: 12%;
+            right: 2%;
+            z-index: 3;
+
+        }
+
+        #menuIcon .itemMenu {
+            position: relative;
+            float: right;
+            list-style-type: none;
+            padding: 5px;
+            background-color: white;
+            margin: 2px;
+            border-radius: 60px;
+            width: 45px;
+            height: 45px;
+
+        }
+
+        #menuCamera {
+            visibility: hidden;
+            opacity: 0;
+
+            position: relative;
+            list-style-type: none;
+            width: 140px;
+            height: 300px;
+            top: -180px;
+            height: 0px;
+
+        }
+
+        #menuCamera .iconCame {
+            background-color: white;
+            margin: 5px;
+            height: 30px;
+        }
+
+        .iconCame {}
+
+        #items #item :hover {
+            opacity: 0.5;
+        }
+
+        #items-table #item :hover {
+            opacity: 0.5;
+        }
+
+        #items-chair #item :hover {
+            opacity: 0.5;
+        }
+        
+       canvas {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }

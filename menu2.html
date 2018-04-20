@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="www.frebsite.nl" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+
+    <title>Holomia</title>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/demo.css" />
+    <link rel="stylesheet" href="dist/jquery.mmenu.all.css" />
+    <link rel="stylesheet" href="css/Info.css">
+
+    <style>
+        @media (min-width: 992px) {
+            .header a {
+                display: none;
+            }
+        }
+
+        .mm-navbar_tabs span {
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 450px) {
+            .mm-navbar_tabs span {
+                display: none;
+            }
+        }
+
+        .content {
+            padding: 0px;
+        }
+
+        canvas {
+
+            pointer-events: none;
+            transform-origin: 0px 0px 0px;
+            transform :matrix(1,0,0,1,0,0);
+        }
+
+        #panel-menu ul,
+        #panel-account ul,
+        #panel-cart ul {
+            position: absolute;
+            width: 100%;
+        }
+
+        #panel-menu ul li,
+        #panel-account ul li,
+        #panel-cart ul li {
+            position: relative;
+            width: 30%;
+            float: left;
+            padding: 1%;
+        }
+
+        #panel-account {}
+
+        #items,
+        #items-table,
+        #items-chair {
+            width: 100%;
+        }
+
+        #items img,
+        #items-table img,
+        #items-chair img {
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+        }
+
+        #panel-menu ul li img,
+        #panel-account ul li img,
+        #panel-cart ul li img {
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            transition: .5s ease;
+            backface-visibility: hidden;
+        }
+
+        #menuSideBar {
+            position: relative;
+            float: left;
+            widows: 20%;
+        }
+
+        #btnClose {
+            position: relative;
+            z-index: 2;
+            width: 40px;
+            height: 40px;
+        }
+
+        #btnOpen {
+            position: relative;
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+        }
+
+        #item img:hover {
+            color: 0x41cece;
+        }
+
+        #menuIcon {
+            position: absolute;
+            width: 100%;
+            height: 0px;
+            bottom: 100px;
+            right: 2%;
+            z-index: 3;
+
+        }
+
+        #menuIcon .itemMenu {
+            position: relative;
+            float: right;
+            list-style-type: none;
+            padding: 5px;
+            background-color: white;
+            margin: 2px;
+            border-radius: 60px;
+            width: 45px;
+            height: 45px;
+
+        }
+
+        #menuCamera {
+            visibility: hidden;
+            opacity: 0;
+
+            position: relative;
+            list-style-type: none;
+            width: 140px;
+            height: 300px;
+            top: -180px;
+            height: 0px;
+
+        }
+
+        #menuCamera .iconCame {
+            background-color: white;
+            margin: 5px;
+            height: 30px;
+        }
+
+
+        #items #item :hover {
+            opacity: 0.5;
+        }
+
+        #items-table #item :hover {
+            opacity: 0.5;
+        }
+
+        #items-chair #item :hover {
+            opacity: 0.5;
+        }
+    </style>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="dist/jquery.mmenu.all.js"></script>
+    <script src="js/items/door.js"></script>
+    <script src="js/items/ghe.js"></script>
+    <script src="js/items/table.js"></script>
+    <script src="js/code/camera.js"></script>
+    <script>
+        $(function() {
+            $('nav#menu').mmenu({
+                extensions: ['theme-dark'],
+                setSelected: true,
+                counters: true,
+                searchfield: {
+                    placeholder: 'Search menu items'
+                },
+                iconbar: {
+                    add: true,
+                    size: 40,
+                    top: [
+                        '<a href="#/"><span class="fa fa-home"></span></a>'
+                    ],
+                    bottom: [
+                        '<a href="#/"><span class="fa fa-twitter"></span></a>',
+                        '<a href="#/"><span class="fa fa-facebook"></span></a>',
+                        '<a href="#/"><span class="fa fa-youtube"></span></a>'
+                    ]
+                },
+                sidebar: {
+                    collapsed: {
+                        use: '(min-width: 450px)',
+                        size: 40,
+                        hideNavbar: false
+                    },
+                    expanded: {
+                        use: '(min-width: 992px)',
+                        size: 35
+                    }
+                },
+                navbars: [{
+                    content: ['searchfield']
+                }, {
+                    type: 'tabs',
+                    content: [
+                        '<a href="#panel-menu"><i class="fa fa-bars"></i> <span>Menu</span></a>',
+                        '<a href="#panel-account"><i class="fa fa-user"></i> <span>Account</span></a>',
+                        '<a href="#panel-cart"><i class="fa fa-shopping-cart"></i> <span>Cart</span></a>'
+                    ]
+                }, {
+                    content: ['prev', 'breadcrumbs', 'close']
+                }, {
+                    position: 'bottom',
+                    content: ['<a href="holomia.com">Holomia</a>']
+                }]
+            }, {
+                searchfield: {
+                    clear: true
+                },
+                navbars: {
+                    breadcrumbs: {
+                        removeFirst: true
+                    }
+                }
+            });
+
+            $('a[href^="#/"]').click(function() {
+                
+                return false;
+            })
+        });
+    </script>
+</head>
+
+<body style="margin: 0px; overflow: hidden">
+    <div id="page">
+        <div class="header">
+            <a href="#menu"><span></span></a>WebVR ShowRoom
+        </div>
+        <div class="content" id="main" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <ul id="menuIcon">
+                <li class="itemMenu">
+                    <img id="STATE_ITEM.FLOOR"  onclick="return myJavascriptFunc(this);" src="textures/icon-levels-black.svg">
+                </li>
+                <li class="itemMenu">
+                    <img id="STATE_ITEM.BIRDVIEW"  onclick="return myJavascriptFunc(this);" src="textures/icon-birdview-black.svg">
+                </li>
+                <li class="itemMenu">
+                    <img id="STATE_ITEM.CAMERA"  onclick="return myJavascriptFunc(this);" src="textures/icon-camera-black.svg">
+                    <ul id="menuCamera">
+                        <li class="iconCame" onclick="icon1()">Phong Khach</li>
+                        <li class="iconCame" onclick="icon2()">Phong Ngu</li>
+                        <li class="iconCame" onclick="icon3()">Be Boi</li>
+                    </ul>
+                </li>
+                <li class="itemMenu">
+                    <img id="STATE_ITEM.TOPVIEW"  onclick="return myJavascriptFunc(this);" src="textures/icon-floorplan-black.svg">
+                </li>
+
+                <li class="itemMenu">
+                    <img id="STATE_ITEM.MOVE"  onclick="return myJavascriptFunc(this);" src="textures/icon-person-black.svg">
+                </li>
+            </ul>
+            <ul id="info">
+                <li class="hidden" id="infoName"></li>
+                <hr class="hidden" width="100%" size="5px" align="center" color="black" />
+                <li class="hidden" id="infoColor"></li>
+                <li class="hidden" id="infoSize"></li>
+            </ul>
+        </div>
+        <nav id="menu">
+            <div id="panel-menu">
+                <ul>
+                    <ul id="menu">
+                        <div id="items"></div>
+                    </ul>
+                </ul>
+            </div>
+
+            <div id="panel-account">
+                <ul>
+                    <div id="items-table"></div>
+
+                </ul>
+            </div>
+
+            <div id="panel-cart">
+                <ul>
+                    <div id="items-chair"></div>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+
+    <script src="js/three.min.js"></script>
+    <script src="js/loaders/OBJLoader.js"></script>
+    <script src="js/libs/tween.min.js"></script>
+
+    <script src="js/libs/tween.min.js"></script>
+    <script src="js/Detector.js"></script>
+
+    <script src="js/objects/Water2.js"></script>
+    <script src="js/objects/Reflector.js"></script>
+    <script src="js/objects/Refractor.js"></script>
+
+
+    <!--post processing-->
+    <script src="js/postprocessing/EffectComposer.js"></script>
+    <script src="js/postprocessing/RenderPass.js"></script>
+    <script src="js/postprocessing/ShaderPass.js"></script>
+    <script src="js/postprocessing/SAOPass.js"></script>
+    <script src="js/shaders/SAOShader.js"></script>
+    <script src="js/shaders/DepthLimitedBlurShader.js"></script>
+    <script src="js/shaders/UnpackDepthRGBAShader.js"></script>
+
+    <script src="js/shaders/FXAAShader.js"></script>
+
+    <script src="js/shaders/CopyShader.js"></script>
+    <script src="js/shaders/SAOShader.js"></script>
+
+    <script src="js/postprocessing/OutlinePass.js"></script>
+
+    <!--//bloom -->
+    <script src="js/shaders/ConvolutionShader.js"></script>
+    <script src="js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="js/postprocessing/UnrealBloomPass.js"></script>
+
+    <script src="js/vr/ViveController.js"></script>
+    <script src="js/vr/WebVR.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/controls/DragControls.js"></script>
+
+
+
+    <script type="text/javascript">
+        var clickMenu = false;
+        var hand = new THREE.Vector2();
+
+        function CloseBtn() {
+            document.getElementById("menu").style.zIndex = -1;
+            document.getElementById("btnOpen").style.zIndex = 2;
+
+        }
+
+        function OpenBtn() {
+            document.getElementById("menu").style.zIndex = 2;
+            document.getElementById("btnOpen").style.zIndex = 1;
+        }
+
+        function iconCamera() {
+            if (clickMenu == false) {
+                activeIconCame();
+            } else {
+                enableIconCam();
+            }
+
+        }
+
+        function GetInfo(name, color, size) {
+
+            document.getElementById("infoName").innerHTML = name;
+            document.getElementById("infoColor").innerHTML = color;
+            document.getElementById("infoSize").innerHTML = size;
+        }
+
+        function iconOther() {
+            enableIconCam();
+            var link = document.getElementById("icon").getAttribute("state");
+            console.log(link);
+        }
+        
+        function myJavascriptFunc(item) { 
+            enableIconCam();
+            console.log(item.getAttribute("id"));
+            switch(item.getAttribute("id")){
+                case "STATE_ITEM.MOVE":
+                    activeIconMove();
+                    break;
+                case "STATE_ITEM.TOPVIEW":
+                    activeIconTopView();
+                    break;
+                case "STATE_ITEM.CAMERA":
+                   activeIconCame();
+                    break;
+                case "STATE_ITEM.BIRDVIEW":
+                     activeIconBirdView();
+                    break;
+                case "STATE_ITEM.FLOOR":
+                    activeIconFloorView();
+                    break;
+                   
+                   }
+            return false;
+        }
+        function activeIconCame() {
+            document.getElementById("STATE_ITEM.CAMERA").src = "textures/icon-camera-blue.svg";
+            document.getElementById("menuCamera").style.visibility = "visible";
+            document.getElementById("menuCamera").style.opacity = 1;
+            clickMenu = true;
+        }
+        function activeIconMove(){
+            enableMove = true;
+            document.getElementById("STATE_ITEM.MOVE").src = "textures/icon-person-blue.svg";
+            
+        }
+        function activeIconTopView(){
+            
+            document.getElementById("STATE_ITEM.TOPVIEW").src = "textures/icon-floorplan-blue.svg";
+        }
+        function activeIconBirdView(){
+            
+            document.getElementById("STATE_ITEM.BIRDVIEW").src = "textures/icon-birdview-blue.svg";
+        }
+        function activeIconFloorView(){
+          
+            document.getElementById("STATE_ITEM.FLOOR").src = "textures/icon-levels-blue.svg";
+        }
+        function enableIconCam() {
+            enableMove = false;
+            document.getElementById("STATE_ITEM.CAMERA").src = "textures/icon-camera-black.svg";
+            document.getElementById("STATE_ITEM.FLOOR").src = "textures/icon-levels-black.svg";
+            document.getElementById("STATE_ITEM.BIRDVIEW").src = "textures/icon-birdview-black.svg";
+            document.getElementById("STATE_ITEM.TOPVIEW").src = "textures/icon-floorplan-black.svg";
+            document.getElementById("STATE_ITEM.MOVE").src = "textures/icon-person-black.svg";
+            
+            document.getElementById("menuCamera").style.visibility = "hidden";
+            document.getElementById("menuCamera").style.opacity = 0;
+            clickMenu = false;
+            
+        }
+
+        function icon1() {
+            moveWithId(0);
+        }
+
+        function icon2() {
+            moveWithId(1);
+        }
+
+        function icon3() {
+            moveWithId(2);
+        }
+
+        function moveWithId(i) {
+            var pos = new THREE.Vector3(Cams[i].posX, Cams[i].posY, Cams[i].posZ);
+            var rot = new THREE.Vector3(Cams[i].rotX, Cams[i].rotY, Cams[i].rotZ);
+            MoveAnimation(camera.position, pos, 1500);
+            RotateAnimation(camera.rotation, rot, 1500);
+            hiddenMat = false;
+        }
+        function addItem() {
+            enableInteraction = true;
+            console.log("interaction :"+enableInteraction);   
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) { //event keo
+            //ev.dataTransfer.setData("text",ev.target.id);
+            console.log("drop");
+        }
+        function GetObjectFromTable(item){
+            var object = item.getAttribute("model-url");
+            console.log(object);
+           // return object;
+        }
+        function drop(ev) { // event tha
+            
+            var x, y;
+
+                if (event.changedTouches) {
+                    x = event.changedTouches[0].pageX;
+                    y = event.changedTouches[0].pageY;
+                } else {
+
+                    x = event.clientX;
+                    y = event.clientY;
+
+                }
+            hand.x = (x / renderer.domElement.clientWidth) * 2 - 1;
+            hand.y = -(y /renderer.domElement.clientHeight) * 2 + 1;
+            
+            console.log(hand.x);
+            console.log(hand.y);
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var link = document.getElementById("addItem").getAttribute("model-url");
+            console.log(x);
+            addItemInScence(link,hand.x,hand.y);
+            enableInteraction = false;
+
+        }
+        function enableInNavigation(){
+            enableInteraction = true;
+        }
+        function unenableInNavigation(){
+            console.log("drag end");
+            enableInteraction = false;
+        }
+    </script>
+
+    <script src="js/code/main.js">
+    </script>
+</body>
+
+</html>

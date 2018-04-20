@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - sprites</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+            #topHeader {
+                position: relative;
+                background-color: #3B4954;
+            }
+            #topHeader ul{  
+                position: relative;
+                top:0px;
+                left: 0px;
+                width: 100%;
+                height: 60px;
+                margin: 0px;
+            }
+            #topHeader ul li{
+                list-style-type: none;
+                margin: 0px;
+            }
+            #topHeader ul li img {
+                position: relative;
+                left: 0px;
+                margin: 10px;
+                width: 130px;
+                height: 42px;
+                
+            }
+            .fb-share-button{
+                position: absolute;
+                right: 100px;
+                top: 0px;
+                margin-top: 20px;
+                
+            }
+		</style>
+	</head>
+
+	<body style="margin: 0px; overflow: hidden">
+        
+		<script src="js/three.js"></script>
+        <script src="js/controls/OrbitControls.js"></script>
+        <script src="js/controls/TrackballControls.js"></script>
+        <script src="js/loaders/OBJLoader.js"></script>
+        <script src="js/libs/tween.min.js"></script>
+        <script src="js/Detector.js"></script>
+
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/FXAAShader.js"></script>
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/OutlinePass.js"></script> 
+
+		<script src="js/postprocessing/SAOPass.js"></script>
+
+        <script src="js/shaders/FXAAShader.js"></script>
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/LuminosityHighPassShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/SAOShader.js"></script>
+        <script src="js/shaders/DepthLimitedBlurShader.js"></script>
+        <script src="js/shaders/UnpackDepthRGBAShader.js"></script>
+         <script type="text/javascript" src="js/postprocessing/MaskPass.js"></script>
+        
+        <script src="js/objects/Water2.js"></script>
+        <script src="js/objects/Reflector.js"></script>
+		<script src="js/objects/Refractor.js"></script>
+        
+        <script src="js/postprocessing/UnrealBloomPass.js"></script>
+        
+        <div id= "topHeader">
+            <ul>
+                <li><a href="holomia.com"><img src="logo/logo_holomia_feeling.png"></a></li>
+            </ul>
+        </div>
+
+        
+        <script>(function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = 'https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.11&appId=1024600884319950&autoLogAppEvents=1';
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+        
+        
+            <div id="main"></div>
+		<script>
+
+             var textures = [
+                    ["texture/ThayVatLieu/thayvl_sofa001_4.png","texture/ThayVatLieu/thayvl_sofa001_1.png","texture/ThayVatLieu/thayvl_sofa001_2.png","texture/ThayVatLieu/thayvl_sofa001_3.png"],
+                    ["texture/ThayVatLieu/thayvl_sofa001_4.png","texture/ThayVatLieu/thayvl_sofa001_1.png","texture/ThayVatLieu/thayvl_sofa001_2.png","texture/ThayVatLieu/thayvl_sofa001_3.png"],
+                    ["models/ThayVatLieu/Ketv/thayvl_ketv_mattu_go_ketv.jpg","models/ThayVatLieu/Ketv/thayvl_ketv_mattu_1_go_ketv_2VRayCompleteMap.png","models/ThayVatLieu/Ketv/thayvl_ketv_mattu_2_go_ketv_3VRayCompleteMap.png","texture/ThayVatLieu/thayvl_sofa001_4.png"],
+                    
+                    ["texture/ThayVatLieu/thayvl_sofa001_4.png","texture/ThayVatLieu/thayvl_sofa001_1.png","texture/ThayVatLieu/thayvl_sofa001_2.png","texture/ThayVatLieu/thayvl_sofa001_3.png"],
+                    ["texture/ThayVatLieu/thayvl_sofa001_4.png","texture/ThayVatLieu/thayvl_sofa001_1.png","texture/ThayVatLieu/thayvl_sofa001_2.png","texture/ThayVatLieu/thayvl_sofa001_3.png"],
+                    ["models/ThayVatLieu/Ketv/thayvl_ketv_mattu_go_ketv.jpg","models/ThayVatLieu/Ketv/thayvl_ketv_mattu_1_go_ketv_2VRayCompleteMap.png","models/ThayVatLieu/Ketv/thayvl_ketv_mattu_2_go_ketv_3VRayCompleteMap.png","texture/ThayVatLieu/thayvl_sofa001_4.png"],
+                    
+                ];
+            var infos = [
+                ["LOUNGE SEAT","100 x 94 x 97 cm"],
+                ["LOUNGE SOFA","274 x 95 x 83 cm"],
+                ["KE TIVI","100 x 94 x 97 cm"],
+                ["LOUNGE SEAT","100 x 94 x 97 cm"],
+                ["LOUNGE SOFA","274 x 95 x 83 cm"],
+                ["KE TIVI","100 x 94 x 97 cm"]
+            ];
+            var infoColors = [
+                ["White Bull Leather","Brown Leather","Grey Fabric","Dark Grey Cotton"],
+                ["White Bull Leather","Brown Leather","Grey Fabric","Dark Grey Cotton"],
+                ["White Bull Leather","Brown Leather","Grey Fabric","Dark Grey Cotton"],
+                ["White Bull Leather","Brown Leather","Grey Fabric","Dark Grey Cotton"],
+                ["White Bull Leather","Brown Leather","Grey Fabric","Dark Grey Cotton"],
+                ["White Bull Leather","Brown Leather","Grey Fabric","Dark Grey Cotton"],
+            ];
+
+			var camera, scene, renderer,mouse,raycaster,mesh_c2,mesh_c3,mesh_c4;
+			var cameraOrtho, sceneOrtho,controls,renderer2,bloomPass;
+            
+			var mapC;
+            var isRotate = false;
+            var isCreatMat = false;
+			var group;
+            var frustumSize = 1000;
+            var isM1 = false,isM2= false,isM3=false,isM4=false;
+            var selectedObjects = [];var selectedOutLine = [];
+            var selectedMats = [];
+            var ObjectsInteractive = [];
+            var numberMaterial = 3;
+            var IdInteractive=-1;
+            var IdMaterial=-1;
+            var sofaL;
+            var groupObject,groupMat;
+            
+            var hiddenMat = false;
+            var raycaster2,mouse2;
+            var isClickGUI = false;
+
+//DI CHUYEN
+            var highCameraPlayer = 260;
+            var voxel;
+            var cubeGeometry = new THREE.BoxGeometry( 50, 50, 50 );
+			var cubeMaterial = new THREE.MeshLambertMaterial( { color: 0x00ff80, overdraw: 0.5 } );
+             var rollOverMesh, rollOverMaterial;
+  
+//outline   
+            var composer, effectFXAA,outlinePass;
+            var nameFoor = "floor_San gach_SubMesh 0";
+            
+            var cubeCamera2,materialENV;
+            var textEnv,textEnv2,textEnv3,textEnv4; 
+            var MaterialFloor;var reflectionCube;
+            var oldClickObject;
+            var isDown = false;
+            var timer;
+            var sofa1,sofa2,sofa3,sofa4;
+            var groupMat2 = [];
+            var groupInfo = [];
+            var indextGroupMat = -1;
+            var textMesh1;
+//CAMERA 
+            var STATE = { NONE: - 1, ROTATE: 0};
+            
+            // Mouse buttons
+        	this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
+
+            var state = STATE.NONE;
+
+            var EPS = 0.000005;
+
+            // current position in spherical coordinates
+            var spherical = new THREE.Spherical();
+            var sphericalDelta = new THREE.Spherical();
+
+            var scale = 1;
+            var panOffset = new THREE.Vector3();
+            var zoomChanged = false;
+
+            var rotateStart = new THREE.Vector2();
+            var rotateEnd = new THREE.Vector2();
+            var rotateDelta = new THREE.Vector2();
+            
+            var enabled = true, enableZoom = true,enableRotate = true;
+//          
+            var zoomSpeed = 1.0, rotateSpeed = 1.0;
+            var autoRotate = false, autoRotateSpeed = 2.0;
+
+            var isMouseDown = false;
+            var isMoveAnimation = false;
+            var isAutoRotate = false;
+            
+            var water;
+            var oldScaleMat = 1;
+            var radX = 0;
+             var radY = 0;
+             var radiousX ;var radiousZ ;
+            var objectTT;
+// khi auto move vi tri va rotate deu thay doi
+            init();
+			animate();
+
+			function init() {
+
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+//                var  container = document.getElementById( 'main' );
+//                    document.body.appendChild( container );
+				camera = new THREE.PerspectiveCamera( 60, width / height, 1, 10000 );
+				camera.position.z = 400;
+                camera.position.y = 200;
+                camera.useQuaternion = true;
+                
+                var aspect = window.innerWidth / window.innerHeight;
+				cameraOrtho = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 2000 );
+				cameraOrtho.position.y = 400;
+
+				cameraOrtho.position.x = 10;
+				cameraOrtho.position.z = 200;
+                
+                
+				scene = new THREE.Scene();
+
+				sceneOrtho = new THREE.Scene();
+
+
+				var textureLoader = new THREE.TextureLoader();
+
+				var mapA = textureLoader.load( "texture/sprite0.png", createHUDSprites );
+
+				group = new THREE.Group();
+                groupObject = new THREE.Group();
+                groupMat = new THREE.Group();
+                groupInfo = new THREE.Group();
+                
+                raycaster = new THREE.Raycaster();
+                raycaster2 = new THREE.Raycaster();
+                
+                     mouse = new THREE.Vector2();
+                    mouse2 = new THREE.Vector2();
+					
+
+				scene.add( group );scene.add( groupObject );sceneOrtho.add( groupMat );sceneOrtho.add( groupInfo );
+                
+//                
+//                var directionalLight = new THREE.DirectionalLight( 0xffffff );
+//                  scene.add( directionalLight );
+                var directionalLight2 = new THREE.AmbientLight( 0xffffff ,3);
+                directionalLight2.position.set(200,-100,0);
+//				
+//                scene.add(directionalLight2);
+                 loadThayVatLieu("texture/cMat/cMat.json");
+                loadHouseFromJson("models/livingroom1/models1.json");
+                
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.autoClear = false; // To allow render overlay on top of sprited sphere
+
+				document.body.appendChild( renderer.domElement );
+
+  
+				cubeCamera2 = new THREE.CubeCamera( 1, 2000, 456 );
+                cubeCamera2.position.set(0,0,0);
+				cubeCamera2.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+				scene.add( cubeCamera2 );
+                
+                
+//load invirment
+                	
+                    var directionsEnv1  = ["texture/EnvMaps/Env0/env0_1.png", "texture/EnvMaps/Env0/env0_2.png","texture/EnvMaps/Env0/env0_3.png", "texture/EnvMaps/Env0/env0_4.png","texture/EnvMaps/Env0/env0_5.png","texture/EnvMaps/Env0/env0_6.png"];
+                
+                
+                    var directionsEnv2  = ["texture/EnvMaps/Env1/env1_1.png", "texture/EnvMaps/Env1/env1_2.png","texture/EnvMaps/Env1/env1_3.png", "texture/EnvMaps/Env1/env1_4.png","texture/EnvMaps/Env1/env1_5.png","texture/EnvMaps/Env1/env1_6.png"];
+                
+                    var directionsEnv3  = ["texture/EnvMaps/Env2/env2_1.png", "texture/EnvMaps/Env2/env2_2.png","texture/EnvMaps/Env2/env2_3.png", "texture/EnvMaps/Env2/env2_4.png","texture/EnvMaps/Env2/env2_5.png","texture/EnvMaps/Env2/env2_6.png"];
+                
+                    var directionsEnv4  = ["texture/EnvMaps/Env3/env3_1.png", "texture/EnvMaps/Env3/env3_2.png","texture/EnvMaps/Env3/env3_3.png", "texture/EnvMaps/Env3/env3_4.png","texture/EnvMaps/Env3/env3_5.png","texture/EnvMaps/Env3/env3_6.png"];
+                
+                        reflectionCube = new THREE.CubeTextureLoader()
+                            .setPath( 'models/Skybox/' )
+                            .load( [ '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg' ] );
+                        reflectionCube.format = THREE.RGBFormat;
+                        scene.background = reflectionCube;
+                     
+                    textEnv = new THREE.CubeTextureLoader().load( directionsEnv1 );
+                
+                    textEnv1 = new THREE.CubeTextureLoader().load( directionsEnv2 );
+                    textEnv2 = new THREE.CubeTextureLoader().load( directionsEnv3 );
+                
+                    textEnv3 = new THREE.CubeTextureLoader().load( directionsEnv4 );
+                
+                
+               
+                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+                document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+                document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+                document.addEventListener( 'mousedown', onMouseDownControl, false );
+                document.addEventListener( 'mousemove', onMouseMoveControl, false );
+                document.addEventListener( 'mouseup', onMouseUp, false );
+                
+				window.addEventListener( 'resize', onWindowResize, false );
+                hiddenMaterial();
+               
+                
+                
+                
+//                loadJson("models/pk8/modelthayvl.json");
+                
+                creatSkyBox();
+                
+                
+                //creat box move
+                //ve hop
+                rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
+                 var loader = new THREE.OBJLoader( );
+                    loader.load("models/footprint.obj", function ( object ) {
+
+                        rollOverMesh = object;
+//                        rollOverMesh.rotateY( - Math.PI / 2 );
+                        scene.add(rollOverMesh);
+                    } ); 
+
+                
+//                loadOutLine();
+//                creatPlaneNotMove(-131,0.2,120,2,1,4);
+//                creatPlaneNotMove(-145,0.2,-400,1.5,2,1.5);
+//                creatPlaneNotMove(-738,0.2,-488,1.5,2,4);
+//                creatPlaneNotMove(-425,0.2,114,1,2,1);
+//                creatPlaneNotMove(403,0.2,355,2.5,2,4);
+//                
+
+//    				var cubeGeom = new THREE.CubeGeometry(100, 100, 10, 1, 1, 1);
+//                    var mirrorCubeMaterial = new THREE.MeshBasicMaterial( { envMap: cubeCamera2.renderTarget } );
+//                    mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
+//                    mirrorCube.position.set(0,0,0);
+//                //	mirrorCubeCamera.position = mirrorCube.position;
+//                    scene.add(mirrorCube);	
+//                
+                var waterGeometry = new THREE.PlaneBufferGeometry( 20, 20 );
+//WATER
+			water = new THREE.Water( waterGeometry, {
+				color: '#bbf9ee',
+				scale: 3,
+				flowDirection: new THREE.Vector2( 2, 2 ),
+			} );
+            water.rotation.x = Math.PI * - 0.5;
+			water.position.set(-150,-6,-1462);
+            water.scale.set(100,50,10);
+			groupObject.add( water );
+                
+            bloomPass = new THREE.UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 ); //1.0, 9, 0.5, 512);
+				bloomPass.renderToScreen = true;
+//effect sao
+            var clearMask = new THREE.ClearMaskPass();
+                
+                
+            composer = new THREE.EffectComposer(renderer);
+			var	renderPass = new THREE.RenderPass(scene, camera);
+                renderPass.clear = true;
+				composer.addPass(renderPass);
+			var	saoPass = new THREE.SAOPass(scene, camera, false, false);
+				saoPass.renderToScreen = true;
+                composer.renderTarget1.stencilBuffer = true;
+				composer.addPass(saoPass);
+                composer.addPass(clearMask);
+//                composer.addPass( bloomPass );
+                
+                
+                saoPass.params.saoIntensity = 0.0001;
+// creat info
+                CreatTextInfo(infos[0][0],infoColors[0][0],infos[0][1]);
+                
+                
+
+			}
+            function loadObj(linkObj,texture,Pos){
+                
+                var textureLoader = new THREE.TextureLoader(  );
+				var texture = textureLoader.load( texture );
+                
+                 var material = new THREE.MeshPhongMaterial({
+                     map:texture,
+                     metalness : 0.1,
+                     roughness : 0.2,
+//                     refractionRatio: 0.98
+                 });
+                //load house
+                var loader = new THREE.OBJLoader( );
+                    loader.load( linkObj, function ( object ) {
+
+                        object.traverse( function ( child ) {
+                            
+                            if ( child instanceof THREE.Mesh ) {							
+                                child.material = material;
+                                console.log(child);
+                            }
+
+                        } );
+                        object;
+                        object.position.set(Pos.x,Pos.y,Pos.z);
+                        
+                        groupObject.add(object);
+                    } ); 
+               
+            }
+            function loadJson(linkJson){
+                var tu = new THREE.ObjectLoader();
+				tu.load(linkJson, function ( obj ) {
+                    var i =0,j=0;
+                    obj.traverse( function ( child ) {
+                    obj.scale.set(200,200,200);
+					if ( child instanceof THREE.Mesh ) {
+                        var metalness = 0, roughness = 0.6;
+                        var envMap = textEnv;
+                        //hack material
+                        if(child.name === "thayvl_Floor_Object004_SubMesh 0"){
+                            console.log("ten thay vl");
+                            metalness = 0.4, roughness = 0.2;
+                        }
+                        if( child.name === "thayvl_den_001_SubMesh 1"){
+                            metalness = 0.5, roughness = 0.2;
+                        }
+                        if( child.name === "thayvl_sofa001_SubMesh 1"){
+                            metalness = 0, roughness = 1;
+                        }
+                        if( child.name === "thayvl_tubep_SubMesh 0"){
+                            metalness = 0.4, roughness = 0.2;
+                        }
+                        if( child.name === "thayvl_tubep_SubMesh 1" || child.name ==="thayvl_tu bep_001_SubMesh 1" ||
+                        child.name ==="thayvl_ke bep_SubMesh 1" || child.name ==="thayvl_tu_SubMesh 1" ||
+                           child.name === "thayvl_ketv_SubMesh 1"
+                           
+                          ){
+                            metalness = 0.2, roughness = 0.5;
+                        }
+                        if( child.name === "thayvl_ke bep_SubMesh 0" ||child.name === "ban_SubMesh 0"){
+                            metalness = 0.4, roughness = 0.2;
+                        }
+                        if( child.name === "thayvl_tu bep_001_SubMesh 0"){
+                            metalness = 0.5, roughness = 0.4;
+                        }
+                        if( child.name === "thayvl_tu bep_001_SubMesh 0"){
+                            metalness = 0.5, roughness = 0.4;
+                        }
+                        if( child.name === "thayvl_den_SubMesh 2" || child.name === "thayvl_den_SubMesh 2"){
+                            metalness = 0.8, roughness = 0.1;
+                        }
+                        if (child.name === "floor_San gach_SubMesh 0"){
+                            metalness = 0.2, roughness = 0.02;
+                        }
+//                        hackMaterial(child,metalness, roughness)
+                       var material = new THREE.MeshStandardMaterial({
+                            map:child.material.map,
+                            metalness : metalness,
+                            roughness : roughness,
+                            color : child.material.color,
+                            normalMap : child.material.normalMap,
+                            lightMap : child.material.lightMap,
+                 /*           envMap: cubeCamera2.renderTarget.texture,*/
+                           envMap : envMap,
+                            name : "" + i,
+                           side: THREE.DoubleSide
+                        });
+                        
+                        
+//                            if(child.name === "thayvl_sofa001_SubMesh 1"){
+//                                for(var k=0;k<4;k++){
+//                                    var material2 = new THREE.MeshStandardMaterial({
+//                                            map:groupMat2[k].material.map,
+//                                            metalness : metalness,
+//                                            roughness : roughness,
+//                                            color : child.material.color,
+//                                            normalMap : groupMat2[k].material.normalMap,
+//                                            lightMap : child.material.lightMap,
+//                                            envMap : envMap,
+//                                            name : "" + j,
+//                                            side: THREE.DoubleSide
+//                                        });
+//                                    groupMat2[k].material = material2;
+//                                    
+//                                }
+//                            }
+//                            if(child.name === "thayvl_ketv_SubMesh 1"){
+//                                for(var k=8;k<10;k++){
+//                                    var material2 = new THREE.MeshStandardMaterial({
+//                                            map:groupMat2[k].material.map,
+//                                            metalness : metalness,
+//                                            roughness : roughness,
+//                                            color : child.material.color,
+//                                            normalMap : groupMat2[k].material.normalMap,
+//                                            lightMap : child.material.lightMap,
+//                                            envMap : envMap,
+//                                            name : "" + j,
+//                                            side: THREE.DoubleSide
+//                                        });
+//                                    groupMat2[k].material = material2;
+//                         
+//                                    
+//                                }
+//                            }
+//                            if(child.name === "thayvl_sofa002_SubMesh 0"){
+//                                for(var k=4;k<8;k++){
+//                                    var material2 = new THREE.MeshStandardMaterial({
+//                                            map:groupMat2[k].material.map,
+//                                            metalness : metalness,
+//                                            roughness : roughness,
+//                                            color : child.material.color,
+//                                            normalMap : groupMat2[k].material.normalMap,
+//                                            lightMap : child.material.lightMap,
+//                                            envMap : envMap,
+//                                            name : "" + j,
+//                                            side: THREE.DoubleSide
+//                                        });
+//                                    groupMat2[k].material = material2;
+//                                 
+//                                    
+//                                }
+//                            }
+                       
+                       i++;j++;
+                        child.material = material;
+//                        console.log(child);
+
+					}
+//                    if ( child.geometry !== undefined ) {
+//                        if ( child instanceof THREE.Mesh ){
+//                        if(child.name === "thayvl_sofa001_SubMesh 1"){
+////                        var bbox = new THREE.Box3().setFromObject(child);
+//                        console.log( child);
+////                        var outlineMaterial1 = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.BackSide } );
+////                        var outlineMesh1 = new THREE.Mesh( bbox , outlineMaterial1 );
+////                        outlineMesh1.position = child.position;
+////                        outlineMesh1.scale.multiplyScalar(210);
+////                        groupObject.add( outlineMesh1 );      
+//                        }
+//                        }
+//                        }
+				} );
+                   
+                    
+                    
+				 	groupObject.add( obj );
+				} );
+                
+
+            }
+            
+//  load frame house
+            function loadHouseFromJson(linkJson){
+                var objectLoader = new THREE.ObjectLoader();
+				objectLoader.load(linkJson, function ( obj ) {
+                    var i =0,j=0;
+                    obj.traverse( function ( child ) {
+                    
+					if ( child instanceof THREE.Mesh ) {
+                        var metalness = 0.2, roughness = 0.4;var envMap = textEnv;
+// vat lieu khung cua
+                    if(child.name === "arch_Cua kinh 003_SubMesh 0"  || child.name === "arch_Cua kinh truot_SubMesh 0" || child.name === "arch_Cua kinh 001_SubMesh 0" || child.name === "arch_Cua kinh 002_SubMesh 0" || child.name === "arch_Cua kinh 000_SubMesh 0" || child.name === "arch_Cua kinh 004_SubMesh 0" || child.name === "arch_Cua kinh 005_SubMesh 0" || child.name === "arch_Cua kinh 023_SubMesh 0" ){
+                        metalness = 0.95, roughness = 0.08;
+                    }
+                    if(child.name === "arch_Tuong go_SubMesh 0"  || child.name === "arch_Cua phong012_SubMesh 0" || child.name === "arch_Cua phong010_SubMesh 0" || child.name === "arch_Cua phong011_SubMesh 0" || child.name === "cMat_Da' ke TV 1_SubMesh 0" || child.name === "cMat_Sofa 1_SubMesh 0" || child.name === "cMat_Bench 1_SubMesh 1" || child.name === "cMat_Ban pk 1_SubMesh 2" || child.name === "fur_Ban001_SubMesh 1" || child.name === "fur_Ban_SubMesh 0" ){
+                        metalness = 0.3, roughness = 0.3;
+                    }
+                    if(child.name === "fur_Tab_SubMesh 0" || child.name === "cMat_Ban pk 1_SubMesh 1" || child.name === "fur_minimal deco1_SubMesh 0" ){
+                        metalness = 0, roughness = 0.4;
+                    }
+                    if(child.name === "fur_Bat_LOD001_SubMesh 0" ){
+                        metalness = 0, roughness = 0.03;
+                    }
+                        
+// vat lieu san nha
+                    if(child.name === "floor_San gach_SubMesh 0"  || child.name === "floor_San gach beboi_SubMesh 0" ){
+                        metalness = 0.1, roughness = 0.15;
+                    }
+                        
+// vat lieu ghe da(leather)                    
+                    if(child.name === "cMat_Armchair 1_SubMesh 1"  || child.name === "cMat_Bench 1_SubMesh 0" ){
+                        metalness = 0.2, roughness = 1;
+                    }
+                    
+                    if(child.name === "arch_Stair1_SubMesh 0" ){
+                        metalness = 0.2, roughness = 0.15;
+                    }
+                    if(child.name === "arch_Cua kinh 018_SubMesh 1"  || child.name === "arch_Cua kinh 000_SubMesh 1" ){
+                        metalness = 0.9, roughness = 0.01;
+                    }
+//                    if(child.name === "ban_SubMesh 0" || child.name === "op bep_SubMesh 0" || child.name === "optuong_SubMesh 0"){
+//                       metalness = 0, roughness = 0;
+//                       }
+// vat lieu inox               
+                        if(child.name === "cMat_Armchair 1_SubMesh 0" || child.name ==="fur_Ban001_SubMesh 0" || child.name === "cMat_Den cay 1_SubMesh 0" || child.name === "fur_Ban_SubMesh 0" || child.name === "fur_TV 4K Bravia x900C_SubMesh 2" || child.name === "arch_Den chum_SubMesh 3" || child.name === "fur_Ban_SubMesh 1" || child.name === "arch_Cua phong010_SubMesh 1" || child.name === "arch_Tu quan ao_SubMesh 1" || child.name === "arch_Cua phong012_SubMesh 1" || child.name === "arch_dowlight doi 005_SubMesh 0" || child.name === "arch_dowlight doi 002_SubMesh 0" || child.name === "arch_dowlight doi 002_SubMesh 0" || child.name === "arch_dowlight doi 001_SubMesh 0" || child.name === "arch_dowlight doi 003_SubMesh 0" || child.name === "arch_dowlight doi 004_SubMesh 0" || child.name === "arch_dowlight doi 006_SubMesh 0" || child.name === "arch_dowlight doi 007_SubMesh 0" || child.name === "arch_dowlight doi 000_SubMesh 0" || child.name === "arch_dowlight001_SubMesh 1" || child.name === "arch_dowlight002_SubMesh 1" || child.name === "arch_dowlight003_SubMesh 1" || child.name === "arch_dowlight004_SubMesh 1" || child.name === "arch_dowlight005_SubMesh 1" || child.name === "arch_dowlight006_SubMesh 1" || child.name === "arch_dowlight007_SubMesh 1" || child.name === "arch_dowlight008_SubMesh 1"){
+                         metalness = 0.8, roughness = 0.3;
+                        envMap = reflectionCube;
+                    }
+                        
+                        
+                        
+                    if(child.name === "cMat_Da' ke TV 1_SubMesh 0" || child.name === "arch_Stair1_SubMesh 0"){
+                        envMap = textEnv3;
+                    }
+                       var material = new THREE.MeshStandardMaterial({
+                            map:child.material.map,
+                            metalness : metalness,
+                            roughness : roughness,
+                            color : child.material.color,
+                            normalMap : child.material.normalMap,
+                            lightMap : child.material.lightMap,
+                            envMap: envMap,
+                            name : "" + i,
+                           lightMapIntensity :2,
+                         
+                        });
+                    
+                    if(child.name === "cMat_Armchair 1_SubMesh 1"){
+                                for(var k=0;k<3;k++){
+                                    var material2 = new THREE.MeshStandardMaterial({
+                                            map:groupMat2[k].material.map,
+                                            metalness : metalness,
+                                            roughness : roughness,
+                                            color : child.material.color,
+                                            normalMap : groupMat2[k].material.normalMap,
+                                            lightMap : child.material.lightMap,
+                                            envMap : child.material.envMap,
+                                            name : "" + j,
+                                            side: THREE.DoubleSide
+                                        });
+                                    groupMat2[k].material = material2;
+                                    
+                                }
+                            }
+                            if(child.name === "cMat_Ban pk 1_SubMesh 2"){
+                                for(var k=3;k<6;k++){
+                                    var material2 = new THREE.MeshStandardMaterial({
+                                            map:groupMat2[k].material.map,
+                                            metalness : metalness,
+                                            roughness : roughness,
+                                            color : child.material.color,
+                                            normalMap : groupMat2[k].material.normalMap,
+                                            lightMap : child.material.lightMap,
+                                            envMap : child.material.envMap,
+                                            name : "" + j,
+                                            side: THREE.DoubleSide
+                                        });
+                                    groupMat2[k].material = material2;
+                         
+                                    
+                                }
+                            }
+                            if(child.name === "cMat_Bench 1_SubMesh 0"){
+                                for(var k=6;k<9;k++){
+                                    var material2 = new THREE.MeshStandardMaterial({
+                                            map:groupMat2[k].material.map,
+                                            metalness : metalness,
+                                            roughness : roughness,
+                                            color : child.material.color,
+                                            normalMap : groupMat2[k].material.normalMap,
+                                            lightMap : child.material.lightMap,
+                                            envMap : child.material.envMap,
+                                            name : "" + j,
+                                            side: THREE.DoubleSide
+                                        });
+                                    groupMat2[k].material = material2;
+                                 
+                                    
+                                }
+                            }
+                        
+                        if(child.name === "cMat_Da' ke TV 1_SubMesh 0"){
+                                for(var k=9;k<11;k++){
+                                    var material2 = new THREE.MeshStandardMaterial({
+                                            map:groupMat2[k].material.map,
+                                            metalness : metalness,
+                                            roughness : roughness,
+                                            color : child.material.color,
+                                            normalMap : groupMat2[k].material.normalMap,
+                                            lightMap : child.material.lightMap,
+                                            envMap : child.material.envMap,
+                                            name : "" + j,
+                                            side: THREE.DoubleSide
+                                        });
+                                    groupMat2[k].material = material2;
+                                    
+                                }
+                            }
+                            if(child.name === "dencay_mattrong_SubMesh 0"){
+                                for(var k=11;k<14;k++){
+                                    var material2 = new THREE.MeshStandardMaterial({
+                                            map:groupMat2[k].material.map,
+                                            metalness : metalness,
+                                            roughness : roughness,
+                                            color : child.material.color,
+                                            normalMap : groupMat2[k].material.normalMap,
+                                            lightMap : child.material.lightMap,
+                                            envMap : child.material.envMap,
+                                            name : "" + j,
+                                            side: THREE.DoubleSide
+                                        });
+                                    groupMat2[k].material = material2;
+                         
+                                    
+                                }
+                            }
+                            if(child.name === "cMat_Sofa 1_SubMesh 1"){
+                                for(var k=14;k<17;k++){
+                                    var material2 = new THREE.MeshStandardMaterial({
+                                            map:groupMat2[k].material.map,
+                                            metalness : metalness,
+                                            roughness : roughness,
+                                            color : child.material.color,
+                                            normalMap : groupMat2[k].material.normalMap,
+                                            lightMap : child.material.lightMap,
+                                            envMap : child.material.envMap,
+                                            name : "" + j,
+                                            side: THREE.DoubleSide
+                                        });
+                                    groupMat2[k].material = material2;
+                                 
+                                    
+                                }
+                            }
+                       
+                       i++;j++;
+  
+                   if(child.name !== "arch_Cua kinh truot_SubMesh 1" && child.name !== "arch_Cua kinh 001_SubMesh 1" &&
+                     child.name !== "arch_lan can kinh_SubMesh 0" && child.name !== "arch_Cua kinh 002_SubMesh 1" &&
+                     child.name !== "arch_Cua kinh 000_SubMesh 1" && child.name !== "fur_TV 4K Bravia x900C_SubMesh 0"
+                     && child.name !== "arch_Nuoc be boi_SubMesh 0" && child.name !== "arch_Cua kinh 003_SubMesh 1"
+                     && child.name !== "arch_Cua kinh 023_SubMesh 1" && child.name !== "arch_Cua kinh 018_SubMesh 1"
+                     && child.name !== "arch_Cua kinh 018_SubMesh 1" && child.name !== "arch_Cua kinh 020_SubMesh 1"
+                     && child.name !== "arch_Cua kinh 004_SubMesh 1" && child.name !== "arch_Cua kinh 020_SubMesh 04"
+                      && child.name !== "arch_Cua kinh 017_SubMesh 1" && child.name !== "arch_Cua kinh 019_SubMesh 1"
+                     && child.name !== "arch_Cua kinh 005_SubMesh 1")    {
+                       child.material = material;
+                   }
+                       
+
+					}
+
+				} );
+                    
+                    
+                    
+                    obj.position.set(0,0,0);
+                    obj.scale.set(200,200,200);
+
+                    var house = obj;
+				 	groupObject.add( house );
+
+				} );
+            }
+            function loadThayVatLieu(linkJson){                         
+                var objectLoader = new THREE.ObjectLoader();
+				objectLoader.load(linkJson, function ( obj ) {
+                    obj.traverse( function ( child ) {
+                    if ( child instanceof THREE.Mesh ) {
+                         groupMat2.push(child);
+                         
+                        }
+
+                    });
+                                      
+                });
+
+            }
+
+            function creatPlaneNotMove(posX,posY,posZ,scaleX,scaleY,scaleZ){
+                var material = new THREE.MeshBasicMaterial( { color: 0x948A6F, wireframe: true } );
+                //load plane not move 
+                var geometry = new THREE.PlaneBufferGeometry( 100, 100 );             
+                geometry.rotateX( - Math.PI / 2 );
+                var  ObjectNotMove = new THREE.Mesh( geometry, material );
+                ObjectNotMove.position.set(posX,posY,posZ);
+                ObjectNotMove.scale.set(scaleX,scaleY,scaleZ);
+                ObjectNotMove.name = 'notplane';
+                groupObject.add(ObjectNotMove);
+            }            
+            function creatSkyBox(){
+                	var imagePrefix = "models/Skybox/";
+                    var directions  = ["1", "2", "3", "4", "5", "6"];
+                    var imageSuffix = ".jpg";
+                    var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000);	
+
+                    var materialArray = [];
+                    for (var i = 0; i < 6; i++)
+                        materialArray.push( new THREE.MeshBasicMaterial({
+                            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+                            side: THREE.BackSide
+                        }));
+                    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+                    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+                    skyBox.position.set(0,0,0);
+                    scene.add( skyBox );
+            }
+//MOUSE DOWN 
+            function  onDocumentMouseDown(event){
+                isMouseDown = true;
+                console.log(camera.rotation);
+                isDown = false;
+               
+                timer = setTimeout(function(){
+                    isDown = true;
+                     
+                },250);
+            }
+//MOUSE UP 
+            
+//CREAT GUI             
+            function onDocumentMouseUp(event){
+            if(isDown === false){
+                event.preventDefault();
+                
+        // chon material 
+                    var x, y;
+
+					if ( event.changedTouches ) {
+
+						x = event.changedTouches[ 0 ].pageX;
+						y = event.changedTouches[ 0 ].pageY;
+
+					} else {
+
+						x = event.clientX;
+						y = event.clientY;
+
+					}
+
+					mouse.x = ( x / window.innerWidth ) * 2 - 1;
+					mouse.y = - ( y / window.innerHeight ) * 2 + 1;
+               
+                raycaster.setFromCamera( mouse, cameraOrtho );
+                var intersects2 = raycaster.intersectObjects(sceneOrtho.children, true );
+
+                if(intersects2.length > 0){
+                    if(IdInteractive > -1 ){
+                    
+                     isClickGUI = true;
+ 
+                        if(groupMat2[IdInteractive*4 + intersects2[ 0 ].object.identity] !== undefined){
+                            selectedObjects[selectedObjects.length-1].material = groupMat2[IdInteractive*4 + intersects2[ 0 ].object.identity].material;
+                            console.log(IdInteractive*4 + intersects2[ 0 ].object.identity);
+                            
+                            
+                        }
+                    }
+                }else{
+                    isClickGUI = false;
+                }
+                
+        //chon vat lieu muon thay
+                
+				mouse2.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
+				mouse2.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
+
+				raycaster.setFromCamera( mouse2, camera );
+
+				var intersects = raycaster.intersectObjects( groupObject.children,true );
+                if(intersects.length > 0 && !isClickGUI){
+                    
+                     IdInteractive = -1;
+                    var box = new THREE.Box3().setFromObject( intersects[0].object );
+                    var pos = new THREE.Mesh( cubeGeometry, cubeMaterial );
+                    pos.position.copy(intersects[0].object.parent.position)
+                    pos.position.x *= 200; pos.position.y *= 200; pos.position.z *= 200;
+        
+//                    pos.position.z += 350;
+                    if(pos.position.y < 150){
+                        pos.position.y = 150;
+                    }
+                     console.log(intersects[0].object.name);
+                    console.log(intersects[0].point);
+                     
+                    addSelectedObject(intersects[0].object);
+                    var nameObject = Number(intersects[0].object.material.name);
+
+//                      if(nameObject > 0){
+//                            IdInteractive = nameObject;
+//                            hiddenMat = true; 
+//                      }
+//                    if(intersects[0].object.name === "cMat_Armchair 1_SubMesh 1"){
+//                            IdInteractive = 0;
+//                            hiddenMat = true;      
+////                            intersects[0].object.material = groupMat2[1].material;
+////                        console.log(groupMat2.children[0].material);
+//                    }
+//                    if(intersects[0].object.name === "cMat_Ban pk 1_SubMesh 2"){
+//                            IdInteractive = 1;
+//                            hiddenMat = true;                           
+//                    }
+//                    if(intersects[0].object.name === "cMat_Bench 1_SubMesh 0"){
+//                            IdInteractive = 2;
+//                            hiddenMat = true;                           
+//                    }
+//                    if(intersects[0].object.name === "cMat_Da' ke TV 1_SubMesh 0"){
+//                            IdInteractive = 3;
+//                            hiddenMat = true;      
+//                            pos.position.z -= 350;
+//                    }
+//                    if(intersects[0].object.name === "dencay_mattrong_SubMesh 0"){
+//                            IdInteractive = 4;
+//                            hiddenMat = true;                           
+//                    }
+//                    if(intersects[0].object.name === "cMat_Sofa 1_SubMesh 1"){
+//                            IdInteractive = 5;
+//                            hiddenMat = true;  
+//                            pos.position.y = 200;
+//                            pos.position.z += 350;
+//                    }
+            //KICH CHUOT LEN SAN THI DI CHUYEN        
+                    if(intersects[0].object.name === nameFoor || intersects[0].object.name === "floor_San gach beboi_SubMesh 0" 
+                       || intersects[0].object.name === "floor_carpet09-00_SubMesh 0" ){
+                        var intersect = intersects[ 0 ];                       
+                        voxel = new THREE.Mesh( cubeGeometry, cubeMaterial );
+						voxel.position.copy( intersect.point ).add( intersect.face.normal );
+                        console.log(camera.rotation);
+        
+                        voxel.position.y = highCameraPlayer;
+                        
+                            IdInteractive = -1
+                            hiddenMat = false;
+                            stopRotate();
+//                           
+                        MoveAnimation(camera.position,voxel.position,1200);
+                        }
+        // kich vao vat thay doi vat lieu            
+                    if(IdInteractive > -1 ){//&& intersects[0].object != oldClickObject
+                        oldClickObject = intersects[0].object;
+                         MoveAnimation(camera.position,pos.position,1000);
+                             radiousX = camera.position.x + 400;
+                            radiousZ = camera.position.z + 400;
+                          rotateCam(intersects[0].object.parent,200);
+//                        
+                        for(var i=0; i<3; i++){
+                            setMaterial(groupMat.children[i],textures[IdInteractive][i]);
+                            groupInfo.remove(groupInfo.children[0]);
+                            groupInfo.remove(groupInfo.children[1]);
+                            groupInfo.remove(groupInfo.children[2]);
+                        }
+                         
+                        CreatTextInfo(infos[IdInteractive][0],infoColors[IdInteractive][0],infos[IdInteractive][1]);
+                        
+                    }
+                }else{
+
+                }
+            }else{
+                console.log("MOUSE DOWN");
+            }
+                
+                clearTimeout(timer);   
+                
+            }
+			function createHUDSprites ( texture ) {
+
+                CreateGUIMaterial();
+
+
+			}
+            function CreateGUIMaterial(){
+                 var width = window.innerWidth ;
+                 var hieght = window.innerHeight/2;
+                 var textureLoader = new THREE.TextureLoader(  );
+                 var hieghtMat;
+                //mat 1
+                var geometry = new THREE.SphereGeometry( 80, 80, 80 );
+                
+                        
+                        textureLoader.load ("texture/sprite0.png", function (texture){
+                            
+                            var material = new THREE.MeshBasicMaterial({
+                            map: texture,
+                            color : '#ffffff',
+                            overdraw: 0.5,
+//                            metalness : 0,
+//                            roughness : 0.5,
+//                            normalMap : textures,
+//                            envMap : textEnv,
+                        });
+                            hieghtMat = material.map.image.width;
+                            mesh_c1 = new THREE.Mesh( geometry, material );
+                            mesh_c1.name = "m1";
+                            mesh_c1.identity = 0;
+                            mesh_c1.position.set(-width/4 ,hieghtMat,1 ); // top left
+                            groupMat.add(mesh_c1);
+                        });
+                //mat 2
+               
+                        textureLoader.load ("texture/sprite0.png", function (texture){
+                            
+                            var material = new THREE.MeshBasicMaterial({
+                            map: texture,
+//                           envMap : textEnv,
+                        });
+                            mesh_c2 = new THREE.Mesh( geometry, material );
+                            mesh_c2.name = "m2";
+                            mesh_c2.identity = 1;
+                            mesh_c2.position.set( 0,hieghtMat,1 ); // top left
+                            groupMat.add(mesh_c2);
+                        });
+                //mat3
+                
+                        textureLoader.load ("texture/sprite0.png", function (texture){
+                            
+                            var material = new THREE.MeshBasicMaterial({
+                            map: texture,
+                            overdraw: 0.5,
+//                            metalness : 0,
+//                            roughness : 0.5,
+//                            normalMap : textures,
+//                            envMap : textEnv,
+                        });
+                            mesh_c3 = new THREE.Mesh( geometry, material );
+                            mesh_c3.name = "m3";
+                            mesh_c3.identity = 2;
+                            mesh_c3.position.set( width/4 ,hieghtMat,1 ); // top left
+                            groupMat.add(mesh_c3);
+                        });
+
+                
+                
+                
+                isCreatMat = true;
+                
+            }
+            function CreatTextInfo(infoObject,infoColor,infoSize){
+                var width = window.innerWidth;
+                var hight = window.innerHeight ;
+                var loader = new THREE.FontLoader();
+               
+			    loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+                
+                var geometry1 = new THREE.TextGeometry(infoObject, {
+
+					font: font,
+					size: 50,
+					height: 10,
+					curveSegments: 2
+
+				});
+                
+                var materials = [
+					new THREE.MeshBasicMaterial( { color: 0xffffff, overdraw: 0.5 } ),
+				];  
+				textMesh1 = new THREE.Mesh( geometry1, materials );
+                textMesh1.position.set(-width/2 - 10,hight -100,1);
+                textMesh1.geometry.needsUpdate = true;   
+                groupInfo.add(textMesh1);
+                
+                var geometry2 = new THREE.TextGeometry(infoColor, {
+
+					font: font,
+					size: 20,
+					height: 8,
+					curveSegments: 2
+
+				});    
+                 
+                var textMesh2 = new THREE.Mesh( geometry2, materials );
+                textMesh2.position.set(-width/2 - 10,hight -130,1);
+                textMesh2.geometry.needsUpdate = true;   
+                groupInfo.add(textMesh2);
+                    
+                var geometry3 = new THREE.TextGeometry(infoSize, {
+
+					font: font,
+					size: 15,
+					height: 6,
+					curveSegments: 2
+
+				});    
+                    
+                var textMesh2 = new THREE.Mesh( geometry3, materials );
+                textMesh2.position.set(-width/2 - 10,hight -150,1);
+                textMesh2.geometry.needsUpdate = true;   
+                groupInfo.add(textMesh2);
+                
+                });
+                    updateHUDSprites();
+            }
+            function updateHUDSprites() {
+
+				var width = window.innerWidth / 2;
+				var height = window.innerHeight / 2;
+//
+//				var material = textMesh1.material;
+//
+//				var imageWidth = material.map.image.width / 2;
+//				var imageHeight = material.map.image.height / 2;
+//
+//				groupInfo.children[0].position.set( - width + imageWidth,   height - imageHeight, 1); // top left
+//				groupInfo.children[0].position.set( - width + imageWidth,   height - 2*imageHeight, 1); // top right
+//				groupInfo.children[0].position.set( - width + imageWidth,   height - 3*imageHeight, 1); // bottom left
+
+
+			}
+
+//MOUSE MOVE            
+            function onDocumentMouseMove( event ) {
+                if(!isMoveAnimation){
+                event.preventDefault();
+     //raycast Object
+        //move
+				raycaster.setFromCamera( mouse, camera );
+
+				var intersects = raycaster.intersectObjects( groupObject.children,true );
+                if(rollOverMesh !== undefined){
+                    rollOverMesh.visible = false;
+                    
+                }
+				if ( intersects.length > 0 ) {
+                    addSelectedObjectOutLine(intersects[0].object);
+//                    outlinePass.selectedObject = selectedOutLine;
+//                    composer.render();
+                    if(  intersects[0].object.name === nameFoor || intersects[0].object.name === "floor_San gach beboi_SubMesh 0" 
+                       || intersects[0].object.name === "floor_carpet09-00_SubMesh 0" ){
+					var intersect = intersects[ 0 ];
+                    rollOverMesh.visible = true;
+					rollOverMesh.position.copy( intersect.point ).add( intersect.face.normal );;
+					rollOverMesh.lookAt(camera.position.x,0,camera.position.z);
+
+				    }
+                    if( intersects[0].object.name !== nameFoor && intersects[0].object.name !== "floor_San gach beboi_SubMesh 0" 
+                       && intersects[0].object.name !== "floor_carpet09-00_SubMesh 0"){
+                        rollOverMesh.visible = false;
+                    }
+                }
+                
+                
+    //raycast GUI            
+                var x, y;
+                
+					if ( event.changedTouches ) {
+
+						x = event.changedTouches[ 0 ].pageX;
+						y = event.changedTouches[ 0 ].pageY;
+
+					} else {
+
+						x = event.clientX;
+						y = event.clientY;
+
+					}
+
+					mouse.x = ( x / window.innerWidth ) * 2 - 1;
+					mouse.y = - ( y / window.innerHeight ) * 2 + 1;
+
+					checkIntersection();
+                }
+			
+			}
+            function addSelectedObjectOutLine( object ) {
+
+					selectedOutLine = [];
+					selectedOutLine.push( object );
+
+            }
+            function addSelectedObject( object ) {
+
+					selectedObjects = [];
+					selectedObjects.push( object );
+
+            }
+            function addSelectedMat( object ) {
+
+					selectedMats = [];
+					selectedMats.push( object );
+
+            }
+            function checkIntersection() {
+
+				raycaster.setFromCamera( mouse, cameraOrtho );
+
+				var intersects2 = raycaster.intersectObjects(groupMat.children, true );
+                
+                isRotate = false;
+                
+                
+				if ( intersects2.length > 0 ) {
+                        rollOverMesh.visible = false;
+						var selectedMatObject = intersects2[ 0 ].object;
+						addSelectedMat( selectedMatObject );
+                             setupObjectScaleAnimation( intersects2[ 0 ].object,
+                               intersects2[ 0 ].object.scale, { x: 1.2, y: 1.2, z: 1.2 },
+                                250, 0, TWEEN.Easing.Linear.None );
+                                isRotate = true;
+                    
+                }else{
+//                    selectedMats = [];
+                    isRotate = false;
+                }
+                
+                
+               
+            }
+            function setupObjectScaleAnimation( object, source, target, duration, delay, easing )
+            {
+                var l_delay = ( delay !== undefined ) ? delay : 0;
+                var l_easing = ( easing !== undefined ) ? easing : TWEEN.Easing.Linear.None;
+
+                new TWEEN.Tween( source )
+                    .to( target, duration )
+                    .delay( l_delay )
+                    .easing( l_easing )
+                    .onUpdate( function() { object.scale.copy( source ); } )
+                    .start();
+            }
+//Thay Vat lieu material            
+            function setMaterial (object,texture,newNormal) {
+                var textureLoader = new THREE.TextureLoader(  );
+                 var newTexturePath =  textureLoader.load(texture);
+                 var newNormalPath =  textureLoader.load(newNormal);
+                    object.traverse(function(child) {
+                        if (child instanceof THREE.Mesh){
+                            child.material.map = newTexturePath;
+//
+//                            child.material.normalMap = newNormalPath;
+                        }
+                    });
+            }
+            
+//move smooth            
+            function MoveAnimation(source, target, delay )
+            {
+                    isMoveAnimation = true;
+					new TWEEN.Tween( source )
+                        .to( target, delay )
+					.easing(TWEEN.Easing.Linear.None).start();
+                    setTimeout(function(){
+                        isMoveAnimation = false;
+                    },delay);
+                  
+            }
+//load outline
+            function loadOutLine(){
+                composer = new THREE.EffectComposer( renderer );
+
+				var renderPass = new THREE.RenderPass( scene, camera );
+				composer.addPass( renderPass );
+
+				outlinePass = new THREE.OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
+				composer.addPass( outlinePass );
+
+				var onLoad = function ( texture ) {
+
+					outlinePass.patternTexture = texture;
+					texture.wrapS = THREE.RepeatWrapping;
+					texture.wrapT = THREE.RepeatWrapping;
+
+				};
+                var loader2 = new THREE.TextureLoader();
+				loader2.load('texture/sofaL_c2.png', onLoad );
+                
+                effectFXAA = new THREE.ShaderPass( THREE.FXAAShader );
+				effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+				effectFXAA.renderToScreen = true;
+				composer.addPass( effectFXAA );
+            }
+ //           
+// ROTATE CAMERA
+            function rotateCam(object){
+                radX += .01;
+                radY += .001;
+
+//                var x = radiousX * Math.sin(radX) * Math.cos(radY);
+//                var z = radiousZ * Math.cos(radX);
+//
+//                camera.position.x = x;
+//                camera.position.z = z;
+
+                camera.lookAt(object.position);
+              };
+            function stopRotate(){
+                if(controls  != undefined && controls.enabled  === true){
+                controls.enabled  = false;
+                controls.enableRotate = false;
+                }
+            }
+			function onWindowResize() {
+
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+
+				camera.aspect = width / height;
+				camera.updateProjectionMatrix();
+
+				cameraOrtho.left = - width / 2;
+				cameraOrtho.right = width / 2;
+				cameraOrtho.top = height / 2;
+				cameraOrtho.bottom = - height / 2;
+				cameraOrtho.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+            function hiddenMaterial(){
+               
+                if(!hiddenMat){
+                    
+                        groupMat.traverse(function(child) {
+                            child.visible = false;
+                            isAutoRotate = false;
+                            child.scale.set(oldScaleMat - 0.2,oldScaleMat -0.2,oldScaleMat -0.2);
+                        });
+                        groupInfo.traverse(function(child) {
+                            child.visible = false;
+                        });
+
+                }else{
+
+                        groupMat.traverse(function(child) {
+                            child.visible = true;
+                            isAutoRotate = true;
+                            
+                           // child.scale.set(0,0,0);
+                        });
+                        groupInfo.traverse(function(child) {
+                            child.visible = true;
+                        });
+                        LoopScaleMat(oldScaleMat + 0.3,groupMat,400);
+                       
+                        var i = 0;                     
+
+                            function myLoop () {           
+                               setTimeout(function () {   
+//                                   LoopScaleMat(oldScaleMat - 0.1,groupMat,200);
+                                  i++;                     
+                                  if (i < 2) {            
+                                     myLoop();             
+                                  }                        
+                               }, 200)
+                                
+                            }
+                            
+                            myLoop(); 
+                }
+                
+            }
+            function LoopScaleMat(newScale,objectGroup,timeDelay){
+                    var i = 0;                     
+
+                            function myLoop () {           
+                               setTimeout(function () {   
+                                    setupObjectScaleAnimation( objectGroup.children[i],
+                                    objectGroup.children[i].scale,{ x: newScale, 
+                                                                   y:  newScale, 
+                                                                   z:  newScale },
+                                                              timeDelay, 0, TWEEN.Easing.Linear.None );                        
+                                  i++;                     
+                                  if (i < numberMaterial) {            
+                                     myLoop();             
+                                  }                        
+                               }, 200)
+                                
+                            }
+                            
+                            myLoop(); 
+            }
+                window.onload = function () {
+                var loadTime = window.performance.timing.domContentLoadedEventEnd-window.performance.timing.navigationStart; 
+                console.log('Page load time is '+ loadTime);
+            }
+                
+                
+                
+//EVENT CAMERA
+            function getAutoRotationAngle() {
+
+                return 2 * Math.PI / 60 / 60 * autoRotateSpeed;
+
+            }
+
+            function getZoomScale() {
+
+                return Math.pow( 0.95, zoomSpeed );
+
+            }
+
+            function rotateLeft( angle ) {
+
+                camera.rotation.y -= angle;
+
+            }
+
+            function rotateUp( angle ) {
+                var minCameraRotX = -1.2;
+                var maxCameraRotX = 1.2;
+                
+                camera.rotation.order = 'YXZ';
+                    camera.rotation.x -= angle;
+                     camera.rotation.x = Math.max(minCameraRotX, Math.min( maxCameraRotX, camera.rotation.x ))
+               
+            }
+
+
+            function handleMouseDownRotate( event ) {             
+
+                rotateStart.set( event.clientX, event.clientY );
+
+            }
+            function handleMouseMoveRotate( event ) {
+            if(!isMoveAnimation ){
+                
+                    
+                    var radious = 100;
+                    rotateEnd.set( event.clientX, event.clientY );
+                    rotateDelta.subVectors( rotateEnd, rotateStart );
+
+                    // rotating across whole screen goes 360 degrees around
+                            rotateLeft( 2 * Math.PI * rotateDelta.x / renderer.domElement.clientWidth * rotateSpeed );
+
+                            // rotating up and down along whole screen attempts to go 360, but limited to 180
+                            rotateUp( 2 * Math.PI * rotateDelta.y / renderer.domElement.clientHeight * rotateSpeed );
+                
+                    rotateStart.copy( rotateEnd );
+                    
+               
+            }
+
+            }
+            
+            function onMouseDownControl (event){
+                if(enabled === false)  return;
+                event.preventDefault();
+                switch (event.button){
+                    case mouseButtons.ORBIT:
+                        if(enableRotate === false) return;
+                        handleMouseDownRotate(event);
+                        state = STATE.ROTATE;
+                        
+                    break;
+                        
+                if(state !== STATE.NONE){
+//                    console.log("button move");
+//                        document.addEventListener( 'mousemove', onMouseMove, false );
+//                        document.addEventListener( 'mouseup', onMouseUp, false );
+                }
+                }
+            }
+            function onMouseMoveControl(event){
+                if(enabled === false) return;
+                event.preventDefault();
+                switch(state){
+                    case STATE.ROTATE :
+                        if(enableRotate === false) return;
+                        if(isMouseDown){
+                            handleMouseMoveRotate(event);
+                        }
+                        
+                        break;
+                
+                        
+                }
+            }
+            function onMouseUp( event ) {
+
+                if ( enabled === false ) return;
+
+                isMouseDown = false;
+
+                state = STATE.NONE;
+
+            }
+          
+
+            
+			function animate() {
+
+				requestAnimationFrame( animate );
+				render();
+
+			}
+
+			function render() {
+                
+                 TWEEN.update();
+				renderer.clear();
+				renderer.render( scene, camera );
+                
+//                 composer.render();
+                renderer.antialias = true;
+				renderer.clearDepth();
+				renderer.render( sceneOrtho, cameraOrtho );
+                
+                            
+                if( isCreatMat){
+                    hiddenMaterial();
+                }
+                if(isAutoRotate){
+//                    rotateCam(selectedObjects[0]);
+                }
+                if(!isRotate){
+                    for(var i=0; i< sceneOrtho.children.length; i++){
+//                        setupObjectScaleAnimation( sceneOrtho.children[i],
+//                               sceneOrtho.children[i].scale, { x: ceneOrtho.children[i].scale.x - 0.2, 
+//                                                              y: ceneOrtho.children[i].scale.y - 0.2,
+//                                                              z: ceneOrtho.children[i].scale.z - 0.2 },
+//                                100, 0, TWEEN.Easing.Linear.None );
+                    }
+                    
+                }
+                if(isRotate){
+                    selectedMats[0].rotation.y += 0.02;
+                }
+////
+//                	cubeCamera2.visible = false;
+//	               cubeCamera2.updateCubeMap( renderer, scene );
+//	               cubeCamera2.visible = true;
+                
+//               camera.translateZ(10); 
+			}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+
+    <title>Holomia</title>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/demo.css" />
+    <link rel="stylesheet" href="dist/jquery.mmenu.all.css" />
+    <link rel="stylesheet" href="css/Info.css">
+  <!--  <link rel="stylesheet" type="text/css" href="css/MainNavigation.css">-->
+   
+
+    <style>
+        #panel-menu ul,
+        #panel-account ul,
+        #panel-cart ul {
+            position: absolute;
+            width: 100%;
+        }
+
+        #panel-menu ul li,
+        #panel-account ul li,
+        #panel-cart ul li {
+            position: relative;
+            width: 30%;
+            float: left;
+            padding: 1%;
+        }
+
+        #panel-account {}
+
+        #items,
+        #items-table,
+        #items-chair {
+            width: 100%;
+        }
+
+        #items img,
+        #items-table img,
+        #items-chair img {
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+        }
+
+        #panel-menu ul li img,
+        #panel-account ul li img,
+        #panel-cart ul li img {
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            transition: .5s ease;
+            backface-visibility: hidden;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .TextInfo {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            padding: 16px 32px;
+        }
+
+        #panel-menu ul li:hover img {
+            opacity: 0.3;
+        }
+
+        #panel-menu ul li:hover .middle {
+            opacity: 1;
+        }
+
+        @media (min-width: 992px) {
+            .header a {
+                display: none;
+            }
+            #panel-menu ul li,
+            #panel-account ul li,
+            #panel-cart ul li {
+                position: relative;
+                width: 23%;
+                float: left;
+                padding: 1%;
+            }
+        }
+
+
+        .mm-navbar_tabs span {
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        @media only screen and (max-width: 850px) {
+            .mm-navbar_tabs span {
+                display: none;
+            }
+            #panel-menu ul li,
+            #panel-account ul li,
+            #panel-cart ul li {
+                position: relative;
+                width: 30%;
+                float: left;
+                padding: 1%;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .mm-navbar_tabs span {
+                display: none;
+            }
+
+        }
+        /*menu canvas*/
+/*menu icon camera*/
+#menuSideBar {
+            position: relative;
+            float: left;
+            widows: 20%;
+        }
+
+        #btnClose {
+            position: relative;
+            z-index: 2;
+            width: 40px;
+            height: 40px;
+        }
+
+        #btnOpen {
+            position: relative;
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+        }
+
+        #item img:hover {
+            color: 0x41cece;
+        }
+
+        #menuIcon {
+            position: absolute;
+            width: 100%;
+            height: 0px;
+            bottom: 12%;
+            right: 2%;
+            z-index: 3;
+
+        }
+
+        #menuIcon .itemMenu {
+            position: relative;
+            float: right;
+            list-style-type: none;
+            padding: 5px;
+            background-color: white;
+            margin: 2px;
+            border-radius: 60px;
+            width: 45px;
+            height: 45px;
+
+        }
+
+        #menuCamera {
+            visibility: hidden;
+            opacity: 0;
+
+            position: relative;
+            list-style-type: none;
+            width: 140px;
+            height: 300px;
+            top: -180px;
+            height: 0px;
+
+        }
+
+        #menuCamera .iconCame {
+            background-color: white;
+            margin: 5px;
+            height: 30px;
+        }
+
+        .iconCame {}
+
+        #items #item :hover {
+            opacity: 0.5;
+        }
+
+        #items-table #item :hover {
+            opacity: 0.5;
+        }
+
+        #items-chair #item :hover {
+            opacity: 0.5;
+        }
+        
+       canvas {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+        
+         
+        
+    </style>
+     <script src="js/three.min.js"></script>
+    <script src="js/loaders/OBJLoader.js"></script>
+    <script src="js/libs/tween.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="dist/jquery.mmenu.all.js"></script>
+    <script src="js/items/door.js"></script>
+    <script src="js/items/ghe.js"></script>
+    <script src="js/items/table.js"></script>
+    <script src="js/code/camera.js"></script>
+    
+
+    <script>
+        $(function() {
+            $('nav#menu').mmenu({
+                extensions: ['theme-dark'],
+                setSelected: true,
+                counters: true,
+                searchfield: {
+                    placeholder: 'Search menu items'
+                },
+                iconbar: {
+                    add: true,
+                    size: 40,
+                    top: [
+                        '<a href="#/"><span class="fa fa-home"></span></a>'
+                    ],
+                    bottom: [
+                        '<a href="#/"><span class="fa fa-twitter"></span></a>',
+                        '<a href="#/"><span class="fa fa-facebook"></span></a>',
+                        '<a href="#/"><span class="fa fa-youtube"></span></a>'
+                    ]
+                },
+                sidebar: {
+                    collapsed: {
+                        use: '(min-width: 450px)',
+                        size: 40,
+                        hideNavbar: false
+                    },
+                    expanded: {
+                        use: '(min-width: 992px)',
+                        size: 35
+                    }
+                },
+                navbars: [{
+                    content: ['searchfield']
+                }, {
+                    type: 'tabs',
+                    content: [
+                        '<a href="#panel-menu"><i class="fa fa-bars"></i> <span>Menu</span></a>',
+                        '<a href="#panel-account"><i class="fa fa-user"></i> <span>Account</span></a>',
+                        '<a href="#panel-cart"><i class="fa fa-shopping-cart"></i> <span>Cart</span></a>'
+                    ]
+                }, {
+                    content: ['prev', 'breadcrumbs']
+                }, {
+                    position: 'bottom',
+                    content: ['<a href="http://holomia.com/" target="_blank">Holomia</a>']
+                }]
+            }, {
+                searchfield: {
+                    clear: true
+                },
+                navbars: {
+                    breadcrumbs: {
+                        removeFirst: true
+                    }
+                }
+            });
+
+            $('a[href^="#/"]').click(function() {
+
+                return false;
+            })
+        });
+    </script>
+</head>
+
+<body style="margin: 0px; overflow: hidden">
+
+    <nav id="menu" style="z-index: 2;" class="mm-menu mm-menu_offcanvas mm-menu_iconbar-40 mm-menu_navbar_top-3 mm-menu_navbar_bottom-1 mm-menu_selected-hover mm-menu_selected-parent mm-menu_sidebar-collapsed mm-menu_sidebar-expanded mm-menu_opened mm-menu_theme-dark">
+        <div id="panel-menu">
+            <ul id="menu">
+                <div id="items"></div>
+            </ul>
+        </div>
+
+        <div id="panel-account">
+            <ul>
+                <div id="items-table"></div>
+
+            </ul>
+        </div>
+
+        <div id="panel-cart">
+            <ul>
+                <div id="items-chair"></div>
+            </ul>
+        </div>
+        <button id="btnClose" onclick="CloseBtn()" class="fa fa-close">    
+            </button>
+    </nav>
+
+    <button id="btnOpen" onclick="OpenBtn()" class="fa fa-navicon">
+        </button>
+    <div id="contentHidden" class="mm-page mm-slideout"></div>
+
+    <ul id="menuIcon">
+        <li class="itemMenu">
+            <img onclick="iconOther()" src="textures/icon-levels-black.svg">
+        </li>
+        <li class="itemMenu">
+            <img onclick="iconOther()" src="textures/icon-birdview-black.svg">
+        </li>
+        <li class="itemMenu">
+            <img id="cameraImg" onclick="iconCamera()" src="textures/icon-camera-black.svg">
+            <ul id="menuCamera">
+                <li class="iconCame" onclick="icon1()">Phong Khach</li>
+                <li class="iconCame" onclick="icon2()">Phong Ngu</li>
+                <li class="iconCame" onclick="icon3()">Be Boi</li>
+            </ul>
+        </li>
+        <li class="itemMenu">
+            <img onclick="iconOther()" src="textures/icon-floorplan-black.svg">
+        </li>
+
+        <li class="itemMenu">
+            <img onclick="iconOther()" src="textures/icon-person-black.svg">
+        </li>
+    </ul>
+        <ul id="info">
+            <li class="hidden" id="infoName">ARMCHAIR</li>
+            <hr class="hidden" width="100%" size="5px" align="center" color="yellow" />
+            <li class="hidden" id="infoColor">White Bull Leather</li>
+            <li class="hidden" id="infoSize">100 x 94 x 97 cm</li>
+        </ul>
+
+
+
+
+
+
+    <script src="js/three.min.js"></script>
+    <script src="js/loaders/OBJLoader.js"></script>
+    <script src="js/libs/tween.min.js"></script>
+   
+    <script src="js/libs/tween.min.js"></script>
+    <script src="js/Detector.js"></script>
+
+    <script src="js/objects/Water2.js"></script>
+    <script src="js/objects/Reflector.js"></script>
+    <script src="js/objects/Refractor.js"></script>
+     
+      <script src="js/controls/OrbitControls.js"></script>
+
+    <!--post processing-->
+    <script src="js/postprocessing/EffectComposer.js"></script>
+    <script src="js/postprocessing/RenderPass.js"></script>
+    <script src="js/postprocessing/ShaderPass.js"></script>
+    <script src="js/postprocessing/SAOPass.js"></script>
+    <script src="js/shaders/SAOShader.js"></script>
+    <script src="js/shaders/DepthLimitedBlurShader.js"></script>
+    <script src="js/shaders/UnpackDepthRGBAShader.js"></script>
+
+    <script src="js/shaders/FXAAShader.js"></script>
+
+    <script src="js/shaders/CopyShader.js"></script>
+    <script src="js/shaders/SAOShader.js"></script>
+
+    <script src="js/postprocessing/OutlinePass.js"></script>
+
+    <!--//bloom -->
+    <script src="js/shaders/ConvolutionShader.js"></script>
+    <script src="js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="js/postprocessing/UnrealBloomPass.js"></script>
+
+    <script src="js/vr/ViveController.js"></script>
+    <script src="js/vr/WebVR.js"></script>
+
+    
+    <script src="js/index.js"></script>
+
+    <div style="position:absolute;"><input id="draw" type="checkbox">
+        <label for="draw" style="color: white;">draw</label>
+    </div>
+    
+    
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 0, 10);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        var raycaster = new THREE.Raycaster();
+        var mouse = new THREE.Vector2();
+        var plane = new THREE.Plane();
+        var planeNormal = new THREE.Vector3();
+        var point = new THREE.Vector3();
+        addItemInScence("models/demo4/models.json");
+        addItemInScence("models/demo4/cMat_base.json");
+        document.addEventListener("mousedown", onMouseDown, false);
+        document.addEventListener("mousemove", onMouseMove, false);
+
+        function getPoint(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            planeNormal.copy(camera.position).normalize();
+            plane.setFromNormalAndCoplanarPoint(planeNormal, scene.position);
+            raycaster.setFromCamera(mouse, camera);
+            raycaster.ray.intersectPlane(plane, point);
+        }
+
+        function setPoint() {
+            var sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(.125, 4, 2), new THREE.MeshBasicMaterial({
+                color: "yellow",
+                wireframe: true
+            }));
+            sphere.position.copy(point);
+            scene.add(sphere);
+        }
+
+        function onMouseDown(event) {
+            getPoint(event);
+             setPoint();
+        }
+
+        function onMouseMove(event) {
+            //getPoint(event);
+            //if (draw.checked) setPoint();
+        }
+
+        render();
+
+        function render() {
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+        function addItemInScence(link){
+            var objectLoader = new THREE.ObjectLoader();
+            objectLoader.load(link, function(obj) {
+                scene.add(obj);
+        })
+        }
+    </script>
+
+    
+</body>
+
+</html>

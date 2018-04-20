@@ -1,0 +1,251 @@
+{
+	"metadata": {
+		"version": "4.3",
+		"type": "Object",
+		"generator": "UnityThreeExporter"
+	},
+	"geometries": [
+		{
+			"uuid": "5e29a12b-a83d-4f87-90cc-800a288bbe9f", 
+			"type": "Geometry", 
+			"data": {
+				"vertices": [0,0.0181,0.08,0,-0.0181,-0.08,0,-0.08,-0.0181,0,0.08,0.0181],
+				"normals": [1,0,0,1,0,0,1,0,0,1,0,0],
+				"uvs": [[0.3785675,0.9887221,0.4392313,0.9276323,0.3785838,0.9276325,0.4392148,0.9887221],[0.1838736,0.7984474,0.2152753,0.7486705,0.1838835,0.7486696,0.2152653,0.7984483]],
+				"faces": [8,2,1,0,2,1,0,2,1,0,8,3,0,1,3,0,1,3,0,1]
+			}
+		},
+		{
+			"uuid": "18342a89-b798-45c0-b659-75c2b1fd588d", 
+			"type": "Geometry", 
+			"data": {
+				"vertices": [0,0.0181,0.08,0,-0.0181,-0.08,0,-0.08,-0.0181,0,0.08,0.0181],
+				"normals": [1,0,0,1,0,0,1,0,0,1,0,0],
+				"uvs": [[0.3785675,0.9887221,0.4392313,0.9276323,0.3785838,0.9276325,0.4392148,0.9887221],[0.1838736,0.7984474,0.2152753,0.7486705,0.1838835,0.7486696,0.2152653,0.7984483]],
+				"faces": [8,2,1,0,2,1,0,2,1,0,8,3,0,1,3,0,1,3,0,1]
+			}
+		},
+		{
+			"uuid": "bf27f40e-4ac5-430d-a273-0aabf57c53dd", 
+			"type": "Geometry", 
+			"data": {
+				"vertices": [0,0.0181,0.08,0,-0.0181,-0.08,0,-0.08,-0.0181,0,0.08,0.0181],
+				"normals": [1,0,0,1,0,0,1,0,0,1,0,0],
+				"uvs": [[0.3785675,0.9887221,0.4392313,0.9276323,0.3785838,0.9276325,0.4392148,0.9887221],[0.1838736,0.7984474,0.2152753,0.7486705,0.1838835,0.7486696,0.2152653,0.7984483]],
+				"faces": [8,2,1,0,2,1,0,2,1,0,8,3,0,1,3,0,1,3,0,1]
+			}
+		}
+	],
+	"materials": [
+		{
+			"uuid": "e465d3b2-c168-431f-9698-14c336bd57b7",
+			"name": "thayvl_ketv_mattu", 
+			"type": "MeshPhongMaterial",
+			"color": "0x7F7F7F",
+			"emissive": "0x000000",
+			"opacity": 1,
+			"map": "7aa6a00d-a859-43b3-bf9c-dce4a3f92be9_MainTex",
+			"normalMap": "7aa6a00d-a859-43b3-bf9c-dce4a3f92be9_BumpMap",
+			"transparent": false,
+			"wireframe": false
+		},
+		{
+			"uuid": "02f68418-5d22-40b4-a5bc-c7287ce615db",
+			"name": "thayvl_ketv_mattu_1", 
+			"type": "MeshPhongMaterial",
+			"color": "0x7F7F7F",
+			"emissive": "0x000000",
+			"opacity": 1,
+			"map": "63e71987-ced9-4882-8d3e-ec68cd587fc2_MainTex",
+			"normalMap": "63e71987-ced9-4882-8d3e-ec68cd587fc2_BumpMap",
+			"transparent": false,
+			"wireframe": false
+		},
+		{
+			"uuid": "7ab65c07-5306-4697-8d7e-4356d6090c19",
+			"name": "thayvl_ketv_mattu_2", 
+			"type": "MeshPhongMaterial",
+			"color": "0x7F7F7F",
+			"emissive": "0x000000",
+			"opacity": 1,
+			"map": "c34b4c10-aa0c-49fd-986b-9275c3707dee_MainTex",
+			"normalMap": "c34b4c10-aa0c-49fd-986b-9275c3707dee_BumpMap",
+			"transparent": false,
+			"wireframe": false
+		}
+	],
+	"object": {
+		"uuid": "f113ee75-c62d-4d7c-ae66-a1548fa18c10",
+		"type": "Object3D",
+		"name": "World",
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"children": [
+			{
+				"uuid": "59731485-a18f-4cf2-9042-80a4689dd2f0",
+				"type": "AmbientLight",
+				"color": "#363942",
+				"name": "RenderSettingsAmbientLight"
+			},
+			{
+				"uuid": "490aae0a-f507-449a-88d8-a09dbac2acbb",
+				"type": "Object3D",
+				"name": "thayvl_ketv",
+				"matrix": [0,1,0,0,0,0,-1,0,-1,0,0,0,-0.8868,0.858,-0.3053,1]
+			},
+			{
+				"uuid": "de9c50de-d4f2-4be5-bc9f-f9931d90b7f7",
+				"type": "Object3D",
+				"name": "thayvl_ke tivi001",
+				"children": [
+					{
+						"uuid": "367746f2-a473-4ea8-a760-e343b6291934",
+						"type": "Mesh",
+						"name": "thayvl_ke tivi001_SubMesh 0",
+						"geometry": "5e29a12b-a83d-4f87-90cc-800a288bbe9f",
+						"material": "e465d3b2-c168-431f-9698-14c336bd57b7",
+						"userdata": {}
+					}
+				],
+				"matrix": [0,1,0,0,-0.6596,0,0.7517,0,0.6586,0,0.5779,0,-3.2931,-0.225,1.245,1]
+			},
+			{
+				"uuid": "ffb33fef-b8d4-4a12-bf6b-6de1c26dfc01",
+				"type": "Object3D",
+				"name": "thayvl_ke tivi002",
+				"children": [
+					{
+						"uuid": "b4c3584c-21db-41b3-a04a-f1dd79df4e77",
+						"type": "Mesh",
+						"name": "thayvl_ke tivi002_SubMesh 0",
+						"geometry": "18342a89-b798-45c0-b659-75c2b1fd588d",
+						"material": "02f68418-5d22-40b4-a5bc-c7287ce615db",
+						"userdata": {}
+					}
+				],
+				"matrix": [0,1,0,0,-0.6596,0,0.7517,0,0.6586,0,0.5779,0,-3.2931,-0.225,1.0585,1]
+			},
+			{
+				"uuid": "cbed3a48-0886-4fcb-97b7-9ccc7f820de4",
+				"type": "Object3D",
+				"name": "thayvl_ke tivi003",
+				"children": [
+					{
+						"uuid": "defa9edb-37f8-4882-a727-c530296683bb",
+						"type": "Mesh",
+						"name": "thayvl_ke tivi003_SubMesh 0",
+						"geometry": "bf27f40e-4ac5-430d-a273-0aabf57c53dd",
+						"material": "7ab65c07-5306-4697-8d7e-4356d6090c19",
+						"userdata": {}
+					}
+				],
+				"matrix": [0,1,0,0,-0.6596,0,0.7517,0,0.6586,0,0.5779,0,-3.2931,-0.225,0.872,1]
+			}
+		]
+	},
+	"images": [
+		{
+			"url": "thayvl_ketv_mattu_go_ketv.jpg",
+			"uuid": "2008a110-2833-420d-b8c1-9e8d973d4332",
+			"name": "thayvl_ketv_mattu_go_ketv.jpg",
+			"originalUrl": "thayvl_ketv_mattu_go_ketv.jpg"
+		},
+		{
+			"url": "thayvl_ketv_mattu_go_ketv_normal.png",
+			"uuid": "df8cc25a-f105-4b4e-a83b-e8c15e50981b",
+			"name": "thayvl_ketv_mattu_go_ketv_normal.png",
+			"originalUrl": "thayvl_ketv_mattu_go_ketv_normal.png"
+		},
+		{
+			"url": "thayvl_ketv_mattu_1_go_ketv_2VRayCompleteMap.png",
+			"uuid": "7785576b-508e-4b07-9597-d174f1906efd",
+			"name": "thayvl_ketv_mattu_1_go_ketv_2VRayCompleteMap.png",
+			"originalUrl": "thayvl_ketv_mattu_1_go_ketv_2VRayCompleteMap.png"
+		},
+		{
+			"url": "thayvl_ketv_mattu_1_go_ketv_2VRayBumpNormalsMap.png",
+			"uuid": "815b824b-00be-4530-9adf-b25b67fed053",
+			"name": "thayvl_ketv_mattu_1_go_ketv_2VRayBumpNormalsMap.png",
+			"originalUrl": "thayvl_ketv_mattu_1_go_ketv_2VRayBumpNormalsMap.png"
+		},
+		{
+			"url": "thayvl_ketv_mattu_2_go_ketv_3VRayCompleteMap.png",
+			"uuid": "9858e7de-dc52-4bca-9d91-872e02d87062",
+			"name": "thayvl_ketv_mattu_2_go_ketv_3VRayCompleteMap.png",
+			"originalUrl": "thayvl_ketv_mattu_2_go_ketv_3VRayCompleteMap.png"
+		},
+		{
+			"url": "thayvl_ketv_mattu_2_go_ketv_3VRayBumpNormalsMap.png",
+			"uuid": "1860e1b5-50d2-47e6-8231-1fa7fc8d196b",
+			"name": "thayvl_ketv_mattu_2_go_ketv_3VRayBumpNormalsMap.png",
+			"originalUrl": "thayvl_ketv_mattu_2_go_ketv_3VRayBumpNormalsMap.png"
+		}
+	],
+	"textures": [
+		{
+			"uuid": "7aa6a00d-a859-43b3-bf9c-dce4a3f92be9_MainTex",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1000,1000],
+			"image": "2008a110-2833-420d-b8c1-9e8d973d4332",
+			"name": "thayvl_ketv_mattu_go_ketv.jpg",
+			"anisotropy": 16
+		},
+		{
+			"uuid": "7aa6a00d-a859-43b3-bf9c-dce4a3f92be9_BumpMap",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1000,1000],
+			"image": "df8cc25a-f105-4b4e-a83b-e8c15e50981b",
+			"name": "thayvl_ketv_mattu_go_ketv_normal.png",
+			"anisotropy": 16
+		},
+		{
+			"uuid": "63e71987-ced9-4882-8d3e-ec68cd587fc2_MainTex",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1000,1000],
+			"image": "7785576b-508e-4b07-9597-d174f1906efd",
+			"name": "thayvl_ketv_mattu_1_go_ketv_2VRayCompleteMap.png",
+			"anisotropy": 16
+		},
+		{
+			"uuid": "63e71987-ced9-4882-8d3e-ec68cd587fc2_BumpMap",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1000,1000],
+			"image": "815b824b-00be-4530-9adf-b25b67fed053",
+			"name": "thayvl_ketv_mattu_1_go_ketv_2VRayBumpNormalsMap.png",
+			"anisotropy": 16
+		},
+		{
+			"uuid": "c34b4c10-aa0c-49fd-986b-9275c3707dee_MainTex",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1000,1000],
+			"image": "9858e7de-dc52-4bca-9d91-872e02d87062",
+			"name": "thayvl_ketv_mattu_2_go_ketv_3VRayCompleteMap.png",
+			"anisotropy": 16
+		},
+		{
+			"uuid": "c34b4c10-aa0c-49fd-986b-9275c3707dee_BumpMap",
+			"offset": [0, 0],
+			"repeat": [1, 1],
+			"magFilter": 1006,
+			"minFilter": 1008,
+			"wrap": [1000,1000],
+			"image": "1860e1b5-50d2-47e6-8231-1fa7fc8d196b",
+			"name": "thayvl_ketv_mattu_2_go_ketv_3VRayBumpNormalsMap.png",
+			"anisotropy": 16
+		}
+	]
+}
