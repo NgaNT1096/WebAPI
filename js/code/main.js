@@ -164,6 +164,9 @@ var enableMove = false;
 var plane = new THREE.Plane();
 var planeNormal = new THREE.Vector3();
 var point = new THREE.Vector3();
+var groupMove;
+
+var enableMouse = true;
 
 var sizescale = 1;
 init();
@@ -201,6 +204,7 @@ function init() {
     groupObject = new THREE.Group();
     groupMat = new THREE.Group();
     groupInfo = new THREE.Group();
+    groupMove = new THREE.Group();
 
     raycaster = new THREE.Raycaster();
     raycaster2 = new THREE.Raycaster();
@@ -235,14 +239,14 @@ function init() {
 
     scene.add(group);
     scene.add(groupObject);
-    
+    scene.add(groupMove);
     
     console.log(container.clientWidth);
 
     var directionalLight2 = new THREE.AmbientLight(0x000000, 0.2);
     directionalLight2.position.set(0, 0, 0);
 
-    scene.add(directionalLight2);
+    groupMove.add(directionalLight2);
 
     //load invirment
 
@@ -259,6 +263,7 @@ function init() {
     loadChangeMatOfSelf("models/demo4/cMat_base.json");
 
     loadThayVatLieu("models/demo4/cMat_change.json");
+    
 
     renderer = new THREE.WebGLRenderer({
         precision: "mediump",
@@ -374,7 +379,7 @@ function init() {
     hiddenMaterial();
 
     creatSkyBox();
-
+    activeIconMove();
 
     //creat box move
     //ve hop
@@ -408,12 +413,24 @@ function init() {
     water.scale.set(100, 50, 10);
     groupObject.add(water);
 
+    
     var fontloader = new THREE.FontLoader();
 
     fontloader.load('fonts/gentilis_bold.typeface.json', function (font) {
         fontLoaderInfo = font;
     });
-
+    var dragControls = new THREE.DragControls(groupMove,camera,renderer.domElement);
+    dragControls.addEventListener('dragstart',function(event){
+        console.log("drag start");
+        enabled = false;
+        enableMouse = false;
+    });
+    dragControls.addEventListener('dragend',function(event){
+        console.log("drag end");
+        enabled = true;
+        enableMouse = true;
+    });
+    
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
     document.addEventListener('mouseup', onDocumentMouseUp, false);
@@ -751,7 +768,7 @@ function creatSkyBox() {
 //MOUSE DOWN 
 function onDocumentMouseDown(event) {
    
-
+    if(this.enableMouse === false ) return;
     //                 event.preventDefault() ;
     isMouseDown = true;
 
@@ -766,6 +783,7 @@ function onDocumentMouseDown(event) {
 //MOUSE UP 
 
 function onDocumentMouseUp(event) {
+    if(this.enableMouse === false ) return;
     enableInteraction == false;
 
     if (isDown === false) {
@@ -788,11 +806,11 @@ function onDocumentMouseUp(event) {
          console.log("size canvas ",container.clientWidth);
          console.log("size screen: ",window.innerWidth);
 
-       var a = ((x*(window.innerWidth - container.clientWidth))/window.innerWidth );
-        //                    console.log(x,y);
-        mouse.x = ((x- (window.innerWidth - container.clientWidth)/1.5 - a)/ (container.clientWidth) )* 2 - 1;
-        mouse.y = -(y / window.innerHeight) * 2 + 1;
+       var rect = renderer.domElement.getBoundingClientRect();
 
+		mouse.x = ( ( x - rect.left ) / rect.width ) * 2 - 1;
+		mouse.y = - ( ( y - rect.top ) / rect.height ) * 2 + 1;
+        
         raycaster.setFromCamera(mouse, cameraOrtho);
         var intersects2 = raycaster.intersectObjects(groupMat.children, true);
 
@@ -834,12 +852,10 @@ function onDocumentMouseUp(event) {
         //chon vat lieu muon thay
         
 
-        var a = ((x*(window.innerWidth - container.clientWidth))/window.innerWidth );
-        
-       
-        //                    console.log(x,y);
-        mouse2.x = ((x- (window.innerWidth - container.clientWidth)/1.5 - a)/ (container.clientWidth) )* 2 - 1;
-        mouse2.y = -(y / window.innerHeight) * 2 + 1;
+        var rect = renderer.domElement.getBoundingClientRect();
+
+		mouse2.x = ( ( x - rect.left ) / rect.width ) * 2 - 1;
+		mouse2.y = - ( ( y - rect.top ) / rect.height ) * 2 + 1;
 
         raycaster.setFromCamera(mouse, camera);
 
@@ -942,7 +958,8 @@ function onDocumentMouseUp(event) {
 
 
             }
-            //KICH CHUOT LEN SAN THI DI CHUYEN        
+            //KICH CHUOT LEN SAN THI DI CHUYEN   
+           
             if (intersects[0].object.name === nameFoor || intersects[0].object.name === "floor_San gach beboi_SubMesh 0" ||
                 intersects[0].object.name === "floor_carpet09-00_SubMesh 0") {
                 if (enableMove == true) {
@@ -962,6 +979,7 @@ function onDocumentMouseUp(event) {
                 }
 
             }
+            
             // kich vao vat thay doi vat lieu            
             if (IdInteractive > -1) { //&& intersects[0].object != oldClickObject
                 oldClickObject = intersects[0].object;
@@ -1200,6 +1218,7 @@ function updateHUDSprites() {
 
 //MOUSE MOVE            
 function onDocumentMouseMove(event) {
+    if(this.enableMouse === false ) return;
     if (!isMoveAnimation) {
 
         raycaster.setFromCamera(mouse, camera);
@@ -1256,15 +1275,12 @@ function onDocumentMouseMove(event) {
             y = event.clientY;
 
         }
-        console.log("mouse move ",container.clientWidth);
-        var a = ((x*(window.innerWidth - container.clientWidth))/window.innerWidth );
-        var sizeNavi =(window.innerWidth - container.clientWidth)/1.5;
-       
-        //                    console.log(x,y);
-        mouse.x = ((x-a - sizeNavi) / (container.clientWidth) )* 2 - 1;
+
         
-        console.log("mouse X ",mouse.x);
-        mouse.y = -(y / window.innerHeight) * 2 + 1;
+        var rect = renderer.domElement.getBoundingClientRect();
+
+		mouse.x = ( ( x - rect.left ) / rect.width ) * 2 - 1;
+		mouse.y = - ( ( y - rect.top ) / rect.height ) * 2 + 1;
 
         checkIntersection();
     }
@@ -2055,23 +2071,25 @@ function loadingProgress() {
     }
 }
 
-function addItemInScence(link) {
-    var objectLoader = new THREE.ObjectLoader();
-    objectLoader.load(link, function (obj) {
-        /*var textureLoader = new THREE.TextureLoader();
-        var map = textureLoader.load("texture/Achille/achille_armchair_yellow.jpg");
-
-        obj.traverse( function ( child ) {
-
-            if ( child instanceof THREE.Mesh ) {
-
-                child.material.map = map;
-
-            }
-
-        } );*/
-        obj.scale.set(200, 200, 200);
+function addItemInScence(link,point) {
+    var objectLoader = new THREE.GLTFLoader();
+    objectLoader.load(link, function (data) {
+        
+        var obj =  data.scene;
+       obj.scale.set(10,10,10);
+        obj.position.set(point.x,point.y,point.z);
         objects.push(obj);
-        groupObject.add(obj);
+        
+        groupMove.add(obj);
     })
 }
+        function loadGltf() {
+            var loader = new THREE.GLTFLoader();
+            var url = 'models/item/plant/glTF/tree2.glb';
+            loader.load(url, function(data) {
+                var object = data.scene;
+                /*object.position.set(0,0,0);
+                object.scale.set(0,0,0);*/
+                groupMove.add(object);
+            });
+        }

@@ -6,67 +6,38 @@ $(document).ready(function() {
     {
       "id" : 1,
       "name" : "Red Chair",
-      "image" : "textures/plant/1.JPG",
-      "model" : "models/item/plant/dragon.json",
+      "image" : "textures/navigation/flower/1.png",
+      "model" : "models/item/flower/1.glb",
       "type" : "1"
     },
     {
         "id" : 2,
       "name" : "Blue Chair",
-      "image" : "textures/plant/2.JPG",
+      "image" : "textures/navigation/flower/2.png",
       "model" : "models/item/plant/3.json",
       "type" : "1"
     },
     {
         "id" : 3,
       "name" : "Dresser - Dark Wood",
-      "image" : "textures/plant/3.JPG",
-      "model" : "models/js/DWR_MATERA_DRESSER2.js",
+      "image" : "textures/navigation/flower/7.png",
+      "model" : "models/item/flower/7.glb",
       "type" : "1"
     }, 
     {
         "id" : 4,
       "name" : "Dresser - White",
-      "image" : "textures/plant/4.JPG",
+      "image" : "textures/navigation/flower/4.png",
       "model" : "models/js/we-narrow6white_baked.js",
       "type" : "1"
     },  
     {
         "id" : 5,
       "name" : "Bedside table - Shale",
-      "image" : "textures/plant/5.JPG",
-      "model" : "models/js/bd-shalebedside-smoke_baked.js",
-      "type" : "1"
-    }, 
-    {
-        "id" : 4,
-      "name" : "Dresser - White",
-      "image" : "textures/plant/6.JPG",
-      "model" : "models/js/we-narrow6white_baked.js",
-      "type" : "1"
-    },  
-    {
-        "id" : 5,
-      "name" : "Bedside table - Shale",
-      "image" : "textures/plant/7.JPG",
-      "model" : "models/js/bd-shalebedside-smoke_baked.js",
-      "type" : "1"
-    },
-    {
-        "id" : 6,
-      "name" : "Bookshelf",
-      "image" : "textures/plant/8.JPG",
-      "model" : "models/js/cb-kendallbookcasewalnut_baked.js",
+      "image" : "textures/navigation/flower/5.png",
+      "model" : "models/item/flower/5.glb",
       "type" : "1"
     }
-   /*     
-   {
-      "name" : "",
-      "image" : "",
-      "model" : "",
-      "type" : "1"
-    }, 
-    */
   ]
 
 

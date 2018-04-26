@@ -5,29 +5,29 @@ $(document).ready(function() {
     {
       "id" : 1,
       "name" : "Red Chair",
-      "image" : "textures/textureChair/chair1.jpg",
-      "model" : "models/item/chair/chair1.json",
+      "image" : "textures/navigation/chair/1.png",
+      "model" : "models/item/chair/1.glb",
       "type" : "1"
     },
        {
       "id" : 0,
       "name" : "Chair",
-      "image" : "textures/lamps/lamp1.JPG",
-      "model" : "models/item/lamps/scene.json",
+      "image" : "textures/navigation/chair/2.png",
+      "model" : "models/item/chair/3.glb",
       "type" : "1"
     }, 
     {
         "id" : 2,
       "name" : "Blue Chair",
-      "image" : "textures/textureChair/chair2.JPG",
-      "model" : "models/item/chair/chair2.json",
+      "image" : "textures/navigation/chair/3.png",
+      "model" : "models/item/chair/2.glb",
       "type" : "1"
     },
     {
         "id" : 3,
       "name" : "Dresser - Dark Wood",
-      "image" : "textures/textureChair/parkchair.JPG",
-      "model" : "models/item/chair/parkchair.json",
+      "image" : "textures/navigation/chair/4.png",
+      "model" : "models/item/chair/4.glb",
       "type" : "1"
     }
   ]

@@ -35,12 +35,12 @@
             padding: 0px;
         }
 
-        canvas {
+        /*canvas {
             pointer-events: none;
             transform-origin: 0px 0px 0px;
             transform :matrix(1,0,0,1,0,0);
 
-        }
+        }*/
 
         #panel-menu ul,
         #panel-account ul,
@@ -144,6 +144,36 @@
         #items-chair #item :hover {
             opacity: 0.5;
         }
+         @media screen and (max-width: 415px) { 
+             #menuIcon .itemMenu {
+            position: relative;
+            float: none;
+            bottom: 320px;
+            left: 10px;
+            list-style-type: none;
+            padding: 5px;
+            background-color: white;
+            margin: 2px;
+            border-radius: 60px;
+            width: 45px;
+            height: 45px;
+
+        }
+
+        #menuCamera {
+            visibility: hidden;
+            opacity: 0;
+
+            position: relative;
+            left: 10px;
+            list-style-type: none;
+            width: 140px;
+            height: 300px;
+            top: -100px;
+            height: 0px;
+
+        }
+        }
     </style>
 
     <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -233,9 +263,9 @@
                 <li class="itemMenu">
                     <img id="STATE_ITEM.CAMERA"  onclick="return myJavascriptFunc(this);" src="textures/icon-camera-black.svg">
                     <ul id="menuCamera">
-                        <li class="iconCame" onclick="icon1()">Phong Khach</li>
-                        <li class="iconCame" onclick="icon2()">Phong Ngu</li>
-                        <li class="iconCame" onclick="icon3()">Be Boi</li>
+                        <li id="cam1" class="iconCame" onclick="icon1()">Phong Khach</li>
+                        <li id="cam2" class="iconCame" onclick="icon2()">Phong Ngu</li>
+                        <li id="cam3" class="iconCame" onclick="icon3()">Be Boi</li>
                     </ul>
                 </li>
                 <li class="itemMenu">
@@ -317,13 +347,22 @@
     <script src="js/index.js"></script>
     <script src="js/controls/DragControls.js"></script>
     <script src="js/loaders/GLTFLoader.js"></script>
+    
+    
 
 
     <script type="text/javascript">
         var clickMenu = false;
         var hand = new THREE.Vector2();
         var linkObjectNew;
-
+        var idSelect = 0;
+        var numberSelectMove =1;
+        var numberSelectTopView =0;
+        var numberSelectCam =0;
+        var numberSelectBirdView =0;
+        var numberSelectFloor =0;
+        var raycasterDrop = new THREE.Raycaster();
+        
         function CloseBtn() {
             document.getElementById("menu").style.zIndex = -1;
             document.getElementById("btnOpen").style.zIndex = 2;
@@ -363,18 +402,32 @@
             switch(item.getAttribute("id")){
                 case "STATE_ITEM.MOVE":
                     activeIconMove();
+                    numberSelectMove++;
+                    if(numberSelectMove%2 === 0) enableIconCam();
+                    
                     break;
                 case "STATE_ITEM.TOPVIEW":
                     activeIconTopView();
+                    numberSelectTopView++;
+                    if(numberSelectTopView %2 === 0) enableIconCam();
                     break;
                 case "STATE_ITEM.CAMERA":
                    activeIconCame();
+                   icon1();
+                    numberSelectCam++;
+                    if(numberSelectCam%2 === 0) enableIconCam();
                     break;
                 case "STATE_ITEM.BIRDVIEW":
                      activeIconBirdView();
+                    numberSelectBirdView++;
+                    if(numberSelectBirdView%2 === 0) enableIconCam();
+                    
                     break;
                 case "STATE_ITEM.FLOOR":
                     activeIconFloorView();
+                    numberSelectFloor++;
+                    if(numberSelectFloor%2 === 0) enableIconCam();
+                   
                     break;
                    
                    }
@@ -413,22 +466,34 @@
             
             document.getElementById("menuCamera").style.visibility = "hidden";
             document.getElementById("menuCamera").style.opacity = 0;
+            unenableIconCam();
             clickMenu = false;
             
         }
 
         function icon1() {
+            unenableIconCam();
             moveWithId(0);
+            document.getElementById("cam1").style.color = "#008CBA";
         }
 
         function icon2() {
+            unenableIconCam();
             moveWithId(1);
+            document.getElementById("cam2").style.color = "#008CBA";
         }
 
         function icon3() {
+            unenableIconCam();
             moveWithId(2);
+            document.getElementById("cam3").style.color = "#008CBA";
         }
 
+        function unenableIconCam(){
+            document.getElementById("cam1").style.color = "black";
+            document.getElementById("cam2").style.color = "black";
+            document.getElementById("cam3").style.color = "black";
+        }
         function moveWithId(i) {
             var pos = new THREE.Vector3(Cams[i].posX, Cams[i].posY, Cams[i].posZ);
             var rot = new THREE.Vector3(Cams[i].rotX, Cams[i].rotY, Cams[i].rotZ);
@@ -468,15 +533,22 @@
                     y = event.clientY;
 
                 }
-            hand.x = (x / renderer.domElement.clientWidth) * 2 - 1;
-            hand.y = -(y /renderer.domElement.clientHeight) * 2 + 1;
+            var rect = renderer.domElement.getBoundingClientRect();
+
+            hand.x = ( ( x - rect.left ) / rect.width ) * 2 - 1;
+            hand.y = - ( ( y - rect.top ) / rect.height ) * 2 + 1;
+            raycaster.setFromCamera(hand, camera);
+            var intersects = raycaster.intersectObjects(groupObject.children, true);
+            if(intersects.length > 0){
+                addItemInScence(linkObjectNew,intersects[0].point);
+            }
             
             console.log(hand.x);
             console.log(hand.y);
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
             console.log(linkObjectNew);
-            addItemInScence(linkObjectNew);
+            
             enableInteraction = false;
 
         }
@@ -487,6 +559,7 @@
             console.log("drag end");
             enableInteraction = false;
         }
+
     </script>
 
     <script src="js/code/main.js">

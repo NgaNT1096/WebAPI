@@ -72,21 +72,21 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
                 }
                 //                    console.log(x,y);
-                _mouse.x = (x / window.innerWidth) * 2 - 1;
-                _mouse.y = -(y / window.innerHeight) * 2 + 1;
+//                _mouse.x = (x / window.innerWidth) * 2 - 1;
+//                _mouse.y = -(y / window.innerHeight) * 2 + 1;
 
 
-/*		var rect = _domElement.getBoundingClientRect();
+		var rect = _domElement.getBoundingClientRect();
 
-		_mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
-		_mouse.y = - ( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;*/
+		_mouse.x = ( ( x - rect.left ) / rect.width ) * 2 - 1;
+		_mouse.y = - ( ( y - rect.top ) / rect.height ) * 2 + 1;
 
 		_raycaster.setFromCamera( _mouse, _camera );
 
 		if ( _selected && scope.enabled ) {
 
 			if ( _raycaster.ray.intersectPlane( _plane, _intersection ) ) {
-                _selected.position.set(_intersection.sub( _offset ).x,0, _intersection.sub( _offset ).z);
+                _selected.position.set(_intersection.sub( _offset ).x,_selected.position.y, _intersection.sub( _offset ).z);
 
 			}
 
@@ -102,7 +102,7 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 		if ( intersects.length > 0 ) {
 
-			var object = intersects[ 0 ].object;
+			var object = intersects[ 0 ].object.parent;
 
 			_plane.setFromNormalAndCoplanarPoint( _camera.getWorldDirection( _plane.normal ), object.position );
 
@@ -140,13 +140,15 @@ THREE.DragControls = function ( _objects, _camera, _domElement ) {
 
 		if ( intersects.length > 0 ) {
             console.log(intersects[ 0 ].object);
-			_selected = intersects[ 0 ].object;
+            var objectGroup = intersects[ 0 ].parent;
+			_selected = intersects[ 0 ].object.parent;
 
 			if ( _raycaster.ray.intersectPlane( _plane, _intersection ) ) {
 
 				_offset.copy( _intersection ).sub( _selected.position );
 
 			}
+           
 
 			_domElement.style.cursor = 'move';
 
